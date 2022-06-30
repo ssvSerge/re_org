@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{57e92893-f7b4-40ea-8879-e76f0a8fefd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Debug">
+      <UniqueIdentifier>{b05a85bc-5195-49c8-bed6-702183214cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Release">
+      <UniqueIdentifier>{cb4473b6-1ed3-409f-84f5-13c9a41855bb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CP100_ProvisionUtility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\_out\Debug\ICypher.lib">
+      <Filter>Lib\Debug</Filter>
+    </Library>
+    <Library Include="..\_out\Debug\VCOMCrypto.lib">
+      <Filter>Lib\Debug</Filter>
+    </Library>
+    <Library Include="..\_out\Release\VCOMCrypto.lib">
+      <Filter>Lib\Release</Filter>
+    </Library>
+    <Library Include="..\_out\Release\ICypher.lib">
+      <Filter>Lib\Release</Filter>
+    </Library>
+    <Library Include="..\_out\Release\V100_SDK.lib">
+      <Filter>Lib\Release</Filter>
+    </Library>
+    <Library Include="..\_out\Debug\V100_SDK.lib">
+      <Filter>Lib\Debug</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

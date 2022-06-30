@@ -1,0 +1,572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\polarssl">
+      <UniqueIdentifier>{9f7d5263-8d06-4943-9953-b7bd224ff8b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\polarssl\aes.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\asn1.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\asn1write.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\base64.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\bignum.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\bn_mul.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\certs.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\check_config.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\cipher.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\cipher_wrap.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\config.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\ctr_drbg.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\des.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\ecdsa.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\ecp.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\gcm.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\lumi_config.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\md.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\md_wrap.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\md5.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\oid.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\pem.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\pk.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\pk_wrap.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\pkcs5.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\pkcs12.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\platform.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\rsa.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\sha1.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\sha256.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\sha512.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\x509.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\x509_crl.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\x509_crt.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\polarssl\x509_csr.h">
+      <Filter>include\polarssl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aes_ecb.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\asn1.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\asn1write.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Auto_Crypto_Objects.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\base64.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bignum.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bn_mul.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_aes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_aes_gcm.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_aes_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_bignum.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_bn_mul.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_des.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_des_init.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_dsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_dukpt.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_dukpt_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_ecdsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_envelope.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_hmac.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_hmac_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_md.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_md_wrap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_null.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_rand.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_rsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_rsa_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_sha1.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_sha1_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_sha256.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_sha256_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_sha512.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_sha512_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\c_x509.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\certs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\check_config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cipher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cipher_wrap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptoBSP.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ctr_drbg.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Cypher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\des.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecdsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\envelope.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\envelope_aes_gcm.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\envelope_aes_hmac.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gcm.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lumi_config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lumi_mem_mgr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lumi_random.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lumi_strcasecmp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\md.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\md_wrap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\md5.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oid.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pk.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pk_wrap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pkcs5.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pkcs12.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Platform.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sha1.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sha256.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sha512.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SP800_56B_KAS2.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SP800_108_KDF_CTR_HMAC_SHA.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\x509.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\x509_crl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\x509_crt.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\x509_csr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\aes.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aes_ecb_opt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\asn1parse.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\asn1write.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Auto_Crypto_Objects.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base64.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bignum.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_aes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_aes_gcm.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_aes_gcm_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_aes_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_des.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_des_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_dsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_dsa_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_dukpt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_ecdsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_ecdsa_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_envelope.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_hmac.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_hmac_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_null.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_rand.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_rand_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_rsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_rsa_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_sha1.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_sha1_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_sha256.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_sha256_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_sha512.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_sha512_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\c_x509.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cipher.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cipher_wrap.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ctr_drbg.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cypher.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\des.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecdsa.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecp.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecp_curves.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\envelope_aes_gcm.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\envelope_aes_gcm_self_test.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\envelope_aes_hmac.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\envelope_aes_hmac_self_test.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcm.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lumi_random.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lumi_strcasecmp.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\md.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\md_wrap.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\oid.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pem.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pk.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pk_wrap.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pkcs5.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pkcs12.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pkparse.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pkwrite.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rsa.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sha1.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sha256.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sha512.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SP800_56B_KAS2.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SP800_56B_KAS2_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SP800_108_KDF_CTR_HMAC_SHA.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SP800_108_KDF_CTR_HMAC_SHA_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\x509.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\x509_create.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\x509_crt.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\x509_csr.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\x509write_crt.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\x509write_csr.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
