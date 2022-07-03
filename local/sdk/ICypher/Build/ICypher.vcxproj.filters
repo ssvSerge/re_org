@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\aes.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\asn1parse.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\asn1write.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\base64.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bignum.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cipher.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cipher_wrap.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ctr_drbg.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\des.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ecdsa.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ecp.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ecp_curves.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gcm.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\md.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\md_wrap.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\oid.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pem.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pk.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pk_wrap.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pkcs5.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pkcs12.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pkparse.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pkwrite.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rsa.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sha1.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sha256.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sha512.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\x509.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\x509_create.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\x509_crt.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\x509_csr.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\x509write_crt.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\x509write_csr.c">
+      <Filter>PolarSSL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_aes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_aes_gcm.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_aes_gcm_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_aes_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_des_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_dsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_dukpt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_envelope.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_hmac.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_hmac_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_rand.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_rand_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_rsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_rsa_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_sha1.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_sha1_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_sha256.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_sha256_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_sha512.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_sha512_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_x509.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Cypher.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\envelope_aes_gcm.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\envelope_aes_gcm_self_test.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\envelope_aes_hmac.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\envelope_aes_hmac_self_test.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lumi_random.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Platform.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SP800_56B_KAS2.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SP800_56B_KAS2_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SP800_108_KDF_CTR_HMAC_SHA.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SP800_108_KDF_CTR_HMAC_SHA_self_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_des.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Auto_Crypto_Objects.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\c_null.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CryptoBSP.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\aes.h">
+      <Filter>PolarSSL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_aes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_aes_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_des.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_des_init.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_dsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_dukpt.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_dukpt_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_hmac.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_hmac_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_rand.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_rsa.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_rsa_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_sha1.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_sha1_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_sha256.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_sha256_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_sha512.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_sha512_tvec.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Cypher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\polarssl\lumi_config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\polarssl\config.h">
+      <Filter>PolarSSL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\lumi_mem_mgr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_x509.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Auto_Crypto_Objects.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SP800_56B_KAS2.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\c_envelope.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\AutoHeapBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CypherTypes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICryptoBSP.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICypher.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Platform.h">
+      <Filter>API</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="API">
+      <UniqueIdentifier>{77c53c8c-7827-4b6e-969c-6ce0a0e844e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{11b59994-eb14-425a-8a91-1b6fb77016d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{db692231-1202-4bab-80b6-9abb0e5928b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PolarSSL">
+      <UniqueIdentifier>{a79d4892-4cbf-4fed-b8fa-70c6da6fce78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

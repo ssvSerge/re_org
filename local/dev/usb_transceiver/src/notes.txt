@@ -1,0 +1,14 @@
+
+
+CMD_GET_TEMPLATE    (To illustrate small transfers (1500 bytes)
+CMD_GET_IMAGE       (Large transfers)
+CMD_SET_OPTION  
+    Set indivodual LED?
+    Excercise a fake capture
+    Self-Test (Camera/LED?)
+    Execute Command Line with Parameters
+CMD_GET_CONFIG
+    Serial number?
+CMD_GET_ACQ_STATUS 
+    Completion?
+

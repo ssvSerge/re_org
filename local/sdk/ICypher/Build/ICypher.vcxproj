@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1D575E88-0B90-4537-8894-83F19C12CD04}</ProjectGuid>
+    <RootNamespace>ICypher</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)_out\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)_bin\$(ProjectName)\$(Platform)\</IntDir>
+    <IncludePath>$(SolutionDir)..\..\common\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)_out\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)_bin\$(ProjectName)\$(Platform)\</IntDir>
+    <IncludePath>$(SolutionDir)..\..\common\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include;..\BSP\include;..\..\API;..\..\VCOMCrypto\include;..\..\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;MEM_NAMESPACE=AlgoMem;__OVERRIDE_NEW__=0;POLARSSL_CONFIG_FILE="polarssl/lumi_config.h";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\include;..\BSP\include;..\..\API;..\..\VCOMCrypto\include;..\..\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;MEM_NAMESPACE=AlgoMem;__OVERRIDE_NEW__=0;POLARSSL_CONFIG_FILE="polarssl/lumi_config.h";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\aes.c" />
+    <ClCompile Include="..\src\asn1parse.c" />
+    <ClCompile Include="..\src\asn1write.c" />
+    <ClCompile Include="..\src\Auto_Crypto_Objects.cpp" />
+    <ClCompile Include="..\src\base64.c" />
+    <ClCompile Include="..\src\bignum.c" />
+    <ClCompile Include="..\src\cipher.c" />
+    <ClCompile Include="..\src\cipher_wrap.c" />
+    <ClCompile Include="..\src\CryptoBSP.cpp" />
+    <ClCompile Include="..\src\ctr_drbg.c" />
+    <ClCompile Include="..\src\Cypher.cpp" />
+    <ClCompile Include="..\src\c_aes.cpp" />
+    <ClCompile Include="..\src\c_aes_gcm.cpp" />
+    <ClCompile Include="..\src\c_aes_gcm_self_test.cpp" />
+    <ClCompile Include="..\src\c_aes_self_test.cpp" />
+    <ClCompile Include="..\src\c_des.cpp" />
+    <ClCompile Include="..\src\c_des_self_test.cpp" />
+    <ClCompile Include="..\src\c_dsa.cpp" />
+    <ClCompile Include="..\src\c_dukpt.cpp" />
+    <ClCompile Include="..\src\c_envelope.cpp" />
+    <ClCompile Include="..\src\c_hmac.cpp" />
+    <ClCompile Include="..\src\c_hmac_self_test.cpp" />
+    <ClCompile Include="..\src\c_null.cpp" />
+    <ClCompile Include="..\src\c_rand.cpp" />
+    <ClCompile Include="..\src\c_rand_self_test.cpp" />
+    <ClCompile Include="..\src\c_rsa.cpp" />
+    <ClCompile Include="..\src\c_rsa_self_test.cpp" />
+    <ClCompile Include="..\src\c_sha1.cpp" />
+    <ClCompile Include="..\src\c_sha1_self_test.cpp" />
+    <ClCompile Include="..\src\c_sha256.cpp" />
+    <ClCompile Include="..\src\c_sha256_self_test.cpp" />
+    <ClCompile Include="..\src\c_sha512.cpp" />
+    <ClCompile Include="..\src\c_sha512_self_test.cpp" />
+    <ClCompile Include="..\src\c_x509.cpp" />
+    <ClCompile Include="..\src\des.c" />
+    <ClCompile Include="..\src\ecdsa.c" />
+    <ClCompile Include="..\src\ecp.c" />
+    <ClCompile Include="..\src\ecp_curves.c" />
+    <ClCompile Include="..\src\envelope_aes_gcm.c" />
+    <ClCompile Include="..\src\envelope_aes_gcm_self_test.c" />
+    <ClCompile Include="..\src\envelope_aes_hmac.c" />
+    <ClCompile Include="..\src\envelope_aes_hmac_self_test.c" />
+    <ClCompile Include="..\src\gcm.c" />
+    <ClCompile Include="..\src\lumi_random.c" />
+    <ClCompile Include="..\src\md.c" />
+    <ClCompile Include="..\src\md_wrap.c" />
+    <ClCompile Include="..\src\oid.c" />
+    <ClCompile Include="..\src\pem.c" />
+    <ClCompile Include="..\src\pk.c" />
+    <ClCompile Include="..\src\pkcs12.c" />
+    <ClCompile Include="..\src\pkcs5.c" />
+    <ClCompile Include="..\src\pkparse.c" />
+    <ClCompile Include="..\src\pkwrite.c" />
+    <ClCompile Include="..\src\pk_wrap.c" />
+    <ClCompile Include="..\src\Platform.cpp" />
+    <ClCompile Include="..\src\rsa.c" />
+    <ClCompile Include="..\src\sha1.c" />
+    <ClCompile Include="..\src\sha256.c" />
+    <ClCompile Include="..\src\sha512.c" />
+    <ClCompile Include="..\src\SP800_108_KDF_CTR_HMAC_SHA.cpp" />
+    <ClCompile Include="..\src\SP800_108_KDF_CTR_HMAC_SHA_self_test.cpp" />
+    <ClCompile Include="..\src\SP800_56B_KAS2.cpp" />
+    <ClCompile Include="..\src\SP800_56B_KAS2_self_test.cpp" />
+    <ClCompile Include="..\src\x509.c" />
+    <ClCompile Include="..\src\x509write_crt.c" />
+    <ClCompile Include="..\src\x509write_csr.c" />
+    <ClCompile Include="..\src\x509_create.c" />
+    <ClCompile Include="..\src\x509_crt.c" />
+    <ClCompile Include="..\src\x509_csr.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\AutoHeapBuffer.h" />
+    <ClInclude Include="..\include\CypherTypes.h" />
+    <ClInclude Include="..\include\ICryptoBSP.h" />
+    <ClInclude Include="..\include\ICypher.h" />
+    <ClInclude Include="..\include\aes.h" />
+    <ClInclude Include="..\include\Auto_Crypto_Objects.h" />
+    <ClInclude Include="..\include\Cypher.h" />
+    <ClInclude Include="..\include\c_aes.h" />
+    <ClInclude Include="..\include\c_aes_tvec.h" />
+    <ClInclude Include="..\include\c_des.h" />
+    <ClInclude Include="..\include\c_des_init.h" />
+    <ClInclude Include="..\include\c_dsa.h" />
+    <ClInclude Include="..\include\c_dukpt.h" />
+    <ClInclude Include="..\include\c_dukpt_tvec.h" />
+    <ClInclude Include="..\include\c_envelope.h" />
+    <ClInclude Include="..\include\c_hmac.h" />
+    <ClInclude Include="..\include\c_hmac_tvec.h" />
+    <ClInclude Include="..\include\c_rand.h" />
+    <ClInclude Include="..\include\c_rsa.h" />
+    <ClInclude Include="..\include\c_rsa_tvec.h" />
+    <ClInclude Include="..\include\c_sha1.h" />
+    <ClInclude Include="..\include\c_sha1_tvec.h" />
+    <ClInclude Include="..\include\c_sha256.h" />
+    <ClInclude Include="..\include\c_sha256_tvec.h" />
+    <ClInclude Include="..\include\c_sha512.h" />
+    <ClInclude Include="..\include\c_sha512_tvec.h" />
+    <ClInclude Include="..\include\c_x509.h" />
+    <ClInclude Include="..\include\lumi_mem_mgr.h" />
+    <ClInclude Include="..\include\Platform.h" />
+    <ClInclude Include="..\include\polarssl\config.h" />
+    <ClInclude Include="..\include\polarssl\lumi_config.h" />
+    <ClInclude Include="..\include\SP800_56B_KAS2.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

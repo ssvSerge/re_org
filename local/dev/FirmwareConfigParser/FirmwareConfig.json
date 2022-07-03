@@ -1,0 +1,295 @@
+{
+	"AvailableSensorTypes": {
+		"UNKNOWN_LUMI_DEVICE" : 0,
+		"VENUS_V30X" : 1,
+		"MERCURY_M30X" : 2,
+		"MERCURY_M31X" : 3,
+		"VENUS_V31X" : 4,
+		"VENUS_V371" : 5,
+		"VENUS_V40X" : 6,
+		"VENUS_V42X" : 7,
+		"MERCURY_M32X" : 8,
+		"MERCURY_M42X" : 9,
+		"MERCURY_M21X" : 10,
+		"VENUS_V31X_10" : 11,
+		"VENUS_V32X" : 12,
+		"VENUS_V52X" : 13,
+		"UNSUPPORTED_LUMI_DEVICE" : 99
+    },
+    "AvailableTransModels": 
+	{
+        "MSK00" : 256,
+		"PKI" : 512,
+		"VEX" : 768,
+		"BASE" : 1024,
+		"UNLOCKED" : 1280,
+		"PKI_UNLOCKED" : 1536,
+		"TECBAN" : 1792,
+		"MSK01" : 2048,
+		"INTERM" : 2304,
+		"ALL" : 4096,
+		"HYB01" : 4352,
+		"RECOVERY" : 4608,
+		"HYB02" : 4864,
+		"CP001" : 5120
+    },
+    "AllowedFwCfgs": {
+        "MERCURY_M21X" : [
+			"VEX"
+        ],
+		"MERCURY_M31X" : [
+			"VEX"
+        ],
+		"VENUS_V31X" : [
+			"VEX"
+        ],
+		"VENUS_V31X_10" : [
+			"VEX"
+        ],
+		"VENUS_V32X" : [
+				"VEX",
+                "BASE",
+                "MSK00",
+                "HYB02",
+				"CP001"
+		],
+		"VENUS_V52X" : [
+				"VEX",
+                "BASE",
+                "MSK00",
+                "HYB02",
+				"CP001"
+		]
+    },
+    "KeyMappings": {
+        "BASE" : {
+            "Keys": [
+                {
+                    "KeyName": "KT_EXTKEY_CTK",
+                    "EncKeyType": 1,
+                    "SecureElemSlot": 1
+                },
+				{
+					"KeyName": "KT_EXTKEY_DEVICE_PUBLIC",
+					"EncKeyType": 17,
+					"SecureElemSlot":17
+				},
+				{
+					"KeyName": "KT_EXTKEY_DEVICE_PRIVATE",
+					"EncKeyType": 18,
+					"SecureElemSlot":18
+				},
+				{
+					"KeyName": "KT_EXTKEY_DEVICE_P",
+					"EncKeyType": 19,
+					"SecureElemSlot":19
+				},
+				{
+					"KeyName": "KT_EXTKEY_DEVICE_Q",
+					"EncKeyType": 20,
+					"SecureElemSlot":20
+				},
+				{
+					"KeyName": "KT_EXTKEY_PRIVATE_EXP",
+					"EncKeyType": 22,
+					"SecureElemSlot":22
+				},
+				{
+					"KeyName": "KT_KEY_TMP",
+					"EncKeyType": 65535,
+					"SecureElemSlot":99
+				}
+            ],
+            "Properties": [
+                
+            ]
+        },
+        "HYB02" : {
+            "Keys": [
+                {
+                    "KeyName": "KT_EXTKEY_BTK",
+                    "EncKeyType": 2,
+                    "SecureElemSlot": 101
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES0",
+                    "EncKeyType": 3,
+                    "SecureElemSlot": 102
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES1",
+                    "EncKeyType": 4,
+                    "SecureElemSlot": 103
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES2",
+                    "EncKeyType": 5,
+                    "SecureElemSlot": 104
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES3",
+                    "EncKeyType": 6,
+                    "SecureElemSlot": 105
+                },
+				{
+                    "KeyName": "KT_EXTKEY_TDES2",
+                    "EncKeyType": 9,
+                    "SecureElemSlot": 106
+                },
+				{
+                    "KeyName": "KT_EXTKEY_TDES3",
+                    "EncKeyType": 10,
+                    "SecureElemSlot": 107
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES_VEND",
+                    "EncKeyType": 11,
+                    "SecureElemSlot": 108
+                },
+				{
+                    "KeyName": "KT_EXT_BSK",
+                    "EncKeyType": 4097,
+                    "SecureElemSlot": 109
+                },
+				{
+					"KeyName": "KT_KEY_TMP",
+					"EncKeyType": 65535,
+					"SecureElemSlot":99
+				}
+            ],
+            "Properties": [
+                "FKL_LOCK_STATUS"
+            ]
+        },
+        "MSK00" : {
+            "Keys": [
+                {
+					"KeyName": "KT_MSK_MKD",
+					"EncKeyType": 8193,
+					"SecureElemSlot":101
+				},
+				{
+					"KeyName": "KT_MSK_SK",
+					"EncKeyType": 8195,
+					"SecureElemSlot":102
+				},
+				{
+					"KeyName": "KT_KEY_TMP",
+					"EncKeyType": 65535,
+					"SecureElemSlot":99
+				}
+            ],
+            "Properties": [
+                "PARTIAL_MKD_FOR_TRANSPORT"
+            ]
+        },
+		"CP001" : {
+			"Keys": [
+				{
+					"KeyName": "KT_EXT_DSK",
+					"EncKeyType": 4096,
+					"SecureElemSlot": 112
+				},
+				{
+					"KeyName": "KT_EXTKEY_HOST_PUBLIC",
+					"EncKeyType": 16,
+					"SecureElemSlot": 113
+				},
+				{
+					"KeyName": "KT_EXTKEY_PUBLIC_EXP",
+					"EncKeyType": 21,
+					"SecureElemSlot": 114
+				},
+				{
+                    "KeyName": "KT_EXTKEY_BTK",
+                    "EncKeyType": 2,
+                    "SecureElemSlot": 101
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES0",
+                    "EncKeyType": 3,
+                    "SecureElemSlot": 102
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES1",
+                    "EncKeyType": 4,
+                    "SecureElemSlot": 103
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES2",
+                    "EncKeyType": 5,
+                    "SecureElemSlot": 104
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES3",
+                    "EncKeyType": 6,
+                    "SecureElemSlot": 105
+                },
+				{
+                    "KeyName": "KT_EXTKEY_TDES2",
+                    "EncKeyType": 9,
+                    "SecureElemSlot": 106
+                },
+				{
+                    "KeyName": "KT_EXTKEY_TDES3",
+                    "EncKeyType": 10,
+                    "SecureElemSlot": 107
+                },
+				{
+                    "KeyName": "KT_EXTKEY_AES_VEND",
+                    "EncKeyType": 11,
+                    "SecureElemSlot": 108
+                },
+				{
+                    "KeyName": "KT_EXT_BSK",
+                    "EncKeyType": 4097,
+                    "SecureElemSlot": 109
+                },
+				{
+					"KeyName": "KT_KEY_TMP",
+					"EncKeyType": 65535,
+					"SecureElemSlot":99
+				},
+				{
+					"KeyName": "KT_EXTKEY_TDES0",
+					"EncKeyType": 7,
+					"SecureElemSlot":115
+				},
+				{
+					"KeyName": "KT_EXTKEY_TDES1",
+					"EncKeyType": 8,
+					"SecureElemSlot":116
+				},
+				{
+					"KeyName": "KT_EXTKEY_KSN_0",
+					"EncKeyType": 12,
+					"SecureElemSlot":117
+				},
+				{
+					"KeyName": "KT_EXTKEY_KSN_1",
+					"EncKeyType": 13,
+					"SecureElemSlot":118
+				},
+				{
+					"KeyName": "TRANS_COUNTER_0",
+					"EncKeyType": 101,
+					"SecureElemSlot":119
+				},
+				{
+					"KeyName": "TRANS_COUNTER_1",
+					"EncKeyType": 102,
+					"SecureElemSlot":120
+				},
+				{
+					"KeyName": "KT_EXTKEY_SP",
+					"EncKeyType": 4098,
+					"SecureElemSlot":121
+				}
+			],
+			"Properties": [
+				"FKL_LOCK_STATUS_CP001",
+				"DSK_CRYPTOGRAM_CP001"
+			]
+		}
+    }
+}

@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="0. API">
+      <UniqueIdentifier>{5bc653c1-bf24-435b-bfd9-b7256623c075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0. API\Header Files">
+      <UniqueIdentifier>{b73cbce9-9648-468d-91f7-cc0982371f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0. API\Source Files">
+      <UniqueIdentifier>{35c73dbf-29a8-4054-a2b4-b97f0d54e2a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Common">
+      <UniqueIdentifier>{89fa1034-5e73-4a02-bff1-80e5d0ba5ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Command Handlers">
+      <UniqueIdentifier>{655c3593-35f4-46eb-a2b9-0166538519eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3. Transport">
+      <UniqueIdentifier>{e8f86fab-d1c7-4b9f-908b-ddca56c8f116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4. Device Handlers">
+      <UniqueIdentifier>{6cbe2888-41ff-463c-a3a5-1ddbea88bded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Common\Header Files">
+      <UniqueIdentifier>{3d2874f2-8eaf-47e1-a32e-ca0f89f739e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Common\Source Files">
+      <UniqueIdentifier>{c758ccfa-6a61-4248-8a34-b1545de21c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Command Handlers\Header Files">
+      <UniqueIdentifier>{e1db0926-a373-4175-a774-3b2ccebcb16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Command Handlers\Source Files">
+      <UniqueIdentifier>{d504ad4f-6b9f-4634-bd25-a94f8c6a301c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3. Transport\Header Files">
+      <UniqueIdentifier>{91ab89d1-2781-4e6d-9294-3f9141464009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3. Transport\Source Files">
+      <UniqueIdentifier>{bb1b1191-1765-4e75-989c-06d2734fd28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4. Device Handlers\Header Files">
+      <UniqueIdentifier>{a2d244f6-f5cb-41b9-956a-4032a4091e7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4. Device Handlers\Source Files">
+      <UniqueIdentifier>{2ae1aa58-a0be-4283-b0ad-0541ef016326}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\VCOMCrypto.h">
+      <Filter>0. API\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VCOMBase.h">
+      <Filter>0. API\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\V100EncCmd.h">
+      <Filter>2. Command Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\V100DeviceHandler.h">
+      <Filter>4. Device Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\V100CommandHandler.h">
+      <Filter>2. Command Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\V100Cmd.h">
+      <Filter>2. Command Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\V100_shared_types.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\V100_enc_types.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\usbdriver.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\usbcmdset.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TransportUSB.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\strm_shared.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LumiServiceTypes.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LumiDeviceServiceCommands.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LDSNamedPipe.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IXServiceProvider.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ldiguid.h">
+      <Filter>4. Device Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lumi_stdint.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lumi_inttypes.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ITransport.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Device.h">
+      <Filter>4. Device Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EncCmd.h">
+      <Filter>2. Command Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IEncCmd.h">
+      <Filter>2. Command Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ICmd.h">
+      <Filter>2. Command Handlers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EncTypes.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IMemMgr.h">
+      <Filter>1. Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BaseMutex.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IThread.h">
+      <Filter>3. Transport\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\VCOMCrypto.cpp">
+      <Filter>0. API\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VCOMBase.cpp">
+      <Filter>0. API\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommandHandler.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EncCmd.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ICmd.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IEncCmd.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\V100Cmd.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\V100CommandHandler.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\V100EncCmd.cpp">
+      <Filter>2. Command Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Device.cpp">
+      <Filter>4. Device Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LDSNamedPipe.cpp">
+      <Filter>3. Transport\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TransportUSB.cpp">
+      <Filter>3. Transport\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\usbdriver.cpp">
+      <Filter>3. Transport\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\V100DeviceHandler.cpp">
+      <Filter>4. Device Handlers\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DumpLog.cpp">
+      <Filter>1. Common\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

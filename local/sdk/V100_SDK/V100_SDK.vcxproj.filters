@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Stubs">
+      <UniqueIdentifier>{672010d3-aab4-4dd8-b0cf-97e2688d692e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CP001_common\src\DeviceKeyManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CP001_common\src\HostCryptoMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CP001_common\src\V100_HID.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VCOMCrypto\src\V100CommandBroker_Host.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\lib\hidfacelib_host\HFApi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dev\JEngineShell\src\JEngineExec.cpp">
+      <Filter>Source Files\Stubs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dev\HBSEClient\src\HBSEClient_stubs.cpp">
+      <Filter>Source Files\Stubs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dev\hbcommon\src\logging.cpp">
+      <Filter>Source Files\Stubs</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

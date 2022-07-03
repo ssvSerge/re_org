@@ -1,0 +1,36 @@
+cd /media/sf_temp/rev_39714/dev/usb_transceiver && 
+
+/usr/bin/cmake -E cmake_link_script CMakeFiles/usb_transceiver.dir/link.txt --verbose=1
+
+/opt/linaro-aarch64-2020.09-gcc10.2-linux5.4/bin/aarch64-linux-gnu-g++   
+	-Wall 
+	-Wno-psabi 
+	-Wno-unknown-pragmas   
+	CMakeFiles/usb_transceiver.dir/src/epconst.c.o 
+	CMakeFiles/usb_transceiver.dir/src/epinit.cpp.o 
+	CMakeFiles/usb_transceiver.dir/src/USBTransceiver.cpp.o 
+	CMakeFiles/usb_transceiver.dir/src/VCOMTransceiver.cpp.o 
+	CMakeFiles/usb_transceiver.dir/src/TransactionBroker.cpp.o 
+	CMakeFiles/usb_transceiver.dir/src/UpdateManager.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/V100Cmd.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/ICmd.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/V100IDCmd.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/V100InternalCmd.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/V100EncCmd.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/FileStructure.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/IMemMgr.cpp.o 
+	CMakeFiles/usb_transceiver.dir/__/common/src/MemoryManager.cpp.o  
+	-o ../bin/usb_transceiver  
+	-lpthread 
+	-laio 
+	../hbcommon/libhbcommon.a 
+	../ICypher/libICypher.a 
+	../HBSEClient/libHBSEClient.a 
+	../socketCommLib/libSocketCommunLib.a 
+	-lstdc++fs 
+	-lrt 
+	../FirmwareConfigParser/libFirmwareConfigParser.a 
+
+/usr/local/linaro-aarch64-2020.09-gcc10.2-linux5.4/bin/../lib/gcc/aarch64-linux-gnu/10.2.1/../../../../aarch64-linux-gnu/bin/ld: cannot find -laio
+collect2: error: ld returned 1 exit status
+
