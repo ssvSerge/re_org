@@ -108,7 +108,7 @@ int eventfd(unsigned int initval, int flags) {
     return 0;
 }
 
-int io_submit(io_context_t ctx, long nr, struct iocb* ios[]) {
+int io_submit ( io_context_t ctx_id, long nr, struct iocb** iocbpp ) {
 
     return 0;    
 }

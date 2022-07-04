@@ -16,11 +16,6 @@ namespace hid {
 namespace transport {
 
 
-using   time_source_t  =  std::chrono::steady_clock;
-using   duration_ns_t  =  std::chrono::nanoseconds;
-using   duration_us_t  =  std::chrono::microseconds;
-using   duration_ms_t  =  std::chrono::milliseconds;
-using   checkpoint_t   =  std::chrono::time_point<time_source_t>;
 using   usb_frame_t    =  hid::types::storage_t;
 
 
@@ -38,12 +33,12 @@ enum class usb_state_t {
     STATE_INITIALIZE               = 0, ///< Initialize endpoint at start/restart time.
     STATE_SPINUP                   = 1, ///< Event "ep0 down" received. Reset context and return to the state "INIT".
     STATE_PHANTOM_READ             = 2, ///< Attempt to read from endpoint until short timeout. 
-    STATE_RX_HEADER_REQUEST        = 3, ///< Put the READ request for USB Header.    
     STATE_RX_HEADER_WAIT           = 4, ///< Wait for the header. Timeout is a valid state.    
     STATE_RX_PAYLOAD               = 5, ///< Read payload.
     STATE_HANDLE_REQUEST           = 6, ///< HEADER and PYALOAD are successfully read. Send it to J-Engine.
     STATE_TX_RESPONSE              = 7, ///< Place the TX request for HEADER.
     STATE_FAILED                   = 8, ///< Critical error. Application should go down.
+    STATE_SHUTDOWN                 = 9  ///< Request to shutdown;
 };
 
 class transaction_ctx_t {
@@ -132,112 +127,47 @@ class usb_transport_device_t {
         /// \param ep1     file descriptor for EP1
         /// \param ep2     file descriptor for EP2
         /// 
-        void    ep1_ep2_thread (int ep1, int ep2);
+        void    ep1_ep2_thread ();
 
     private:
 
-        /// @brief Pull asynchronous file system events.
-        /// 
-        /// Place the event "read" and waits with "io_getevents".
-        /// 
-        /// \param evfd    file descriptor for "read" command.
-        /// \param rfds    fd_set prepared before to wait on it.
-        /// \param ctx     asynchronous context required to wait for.
-        /// 
-        /// \returns       USB_STATUS_FAILED in case of error.
-        ///                USB_STATUS_READY  in success case.
-        /// 
-        usb_transport_err_t read_event ( int evfd, fd_set& rfds, io_context_t ctx );
+        void cleanup ( usb_frame_t& frame );
 
-        /// @brief Puts the read request to the FFS.
-        /// 
-        /// Function calls the io_prep_pread and io_submit requests.
-        /// 
-        /// \param iocb_read   i/o control block to prepare read request.
-        /// \param event_fd    eventfd object created by eventfd.
-        /// \param ctx         asynchronous context for the read request.
-        /// \param endpoint    file descriptor (EndPoint) to read.
-        /// \param data        pointer to the destination buffer.
-        /// \param num_bytes   number of bytes to read.
-        /// 
-        /// \returns       USB_STATUS_FAILED in case of error.
-        ///                USB_STATUS_READY  in success case.
-        /// 
-        usb_transport_err_t enqueue_read ( iocb* iocb_read, int event_fd, io_context_t ctx, int endpoint, void* data, size_t num_bytes );
+        usb_transport_err_t io_process  ( struct iocb& io_request, int fd, uint32_t timeout_ms );
+        usb_transport_err_t rx_frame    ( uint8_t* const dst_ptr, size_t dst_len, uint32_t timeout_ms );
+        usb_transport_err_t tx_frame    ( const uint8_t* const src_ptr, size_t src_len, uint32_t timeout_ms );
 
-        /// @brief Puts the write request to the FFS.
-        /// 
-        /// Function calls the io_prep_pwrite and io_submit requests.
-        /// 
-        /// \param iocb_read   i/o control block to prepare write request.
-        /// \param event_fd    eventfd object.
-        /// \param ctx         asynchronous context for the read request.
-        /// \param endpoint    file descriptor (EndPoint) to read.
-        /// \param data        pointer to the destination buffer.
-        /// \param num_bytes   number of bytes to read.
-        /// 
-        /// \returns       USB_STATUS_FAILED in case of error.
-        ///                USB_STATUS_READY  in success case.
-        /// 
-        usb_transport_err_t enqueue_write ( iocb* iocb_write, int event_fd, io_context_t ctx, int endpoint, const void* data, size_t num_bytes );
 
-        /// @brief Waits for the active i/o request.
-        /// 
-        /// 
-        /// 
-        /// \param eprange     range of file descriptors required by the select call.
-        /// \param evfd        eventfd object.
-        /// \param rfds        fd_set object required by the select call.
-        /// \param ctx         asynchronous context.
-        /// \param timeout_ms  wait time, in milliseconds.
-        /// 
-        /// \returns       USB_STATUS_FAILED   in case of error.
-        ///                USB_STATUS_TIMEOUT  in case of timeout.
-        ///                USB_STATUS_READY    in success case.
-        /// 
-        usb_transport_err_t io_wait ( int eprange, int evfd, fd_set& rfds, io_context_t ctx, int timeout_ms );
-
-        usb_transport_err_t io_cancel ();
-
-    private:
         void log_event ( const struct usb_ctrlrequest* setup );
 
         void handle_initialize   ();
         void handle_spinup       ();
         void handle_phantom_read ();
-        void handle_hdr_place    ();
-        void handle_hdr_wait     ();
-        void handle_payload_read ();
-        void handle_read_ok      ( const checkpoint_t time_out );
-        void handle_read_bad     ( const checkpoint_t time_out );
         void handle_command      ();
         void handle_tx_resp      ();
-        bool read_frame          ( const checkpoint_t  time_out, uint8_t* const dst, const size_t len, usb_state_t next_state );
-        bool write_frame         ( const uint8_t* const src, const size_t len, usb_state_t next_state );
-
-    private:
-        bool get_timeout_ms      ( const checkpoint_t point_timeout, uint32_t& ms_cnt );
-
+        void handle_hdr_wait     ();
+        void handle_payload_read ();
+        void handle_read_ok      ( uint32_t timeout_ms );
+        void handle_read_bad     ( uint32_t timeout_ms );
 
     private:
         utils::thread_event         m_thread_fininsed;          ///< at least one thread stopped.
         std::atomic_bool            m_stop_request  = false;    ///< external request to shutdown.
-        std::atomic_bool            m_ep0_active    = false;    ///< true when ep0 is able to operate.
+        std::atomic_bool            m_ep0_inactive  = true;     ///< true when ep0 is NOT able to operate.
         std::atomic_bool            m_sync_request  = false;    ///< Requested to synchronize received from host. 
-        int32_t                     m_fs_eps[3]     = {};       ///< File descriptors to EndPoint 0, 1 and 2.
-        bool                        m_io_ctx_valid  = false;    ///< TRUE if m_io_ctx is valid.
-        io_context_t                m_io_ctx        = {};       ///< Async I/O context created by io_setup.
-        int                         m_evfd_rd       = -1;       ///< Handle to event Read
-        int                         m_evfd_wr       = -1;       ///< Handle to event Write
-        int                         m_io_range      = -1;       ///< Just the range for "select" call.
-        std::string                 m_ep_directory;             ///< FFS directory to create End Points.
+
         std::thread                 m_tid_ep0;                  ///< Thread to serve EP0.
         std::thread                 m_tid_com;                  ///< Thread to serve bulk transfer.
-        fd_set                      m_fdset_read;               ///< FD_SET for read from EP2
-        fd_set                      m_fdset_write;              ///< FD_SET for write to EP1
-        struct iocb                 m_iocb_in;                  ///< IOCB for input
-        struct iocb                 m_iocb_out;                 ///< IOCB for output
-        transaction_ctx_t           m_ctx;                      ///< INPUT header+payload and OUTPUT header+payload
+        std::string                 m_ep_directory;             ///< FFS directory to create End Points.
+
+        transaction_ctx_t           m_data;                     ///< INPUT header+payload and OUTPUT header+payload
+        bool                        m_io_ctx_valid  = false;    ///< TRUE if m_io_ctx is valid.
+        io_context_t                m_io_ctx        = {};       ///< Async I/O context created by io_setup.
+        int                         m_ep0_ctrl      = -1;       ///<
+        int                         m_ep1_tx        = -1;       ///<
+        int                         m_evfd_tx       = -1;       ///< Handle to event Write
+        int                         m_ep2_rx        = -1;       ///<
+        int                         m_evfd_rx       = -1;       ///< Handle to event Read
 };
 
 

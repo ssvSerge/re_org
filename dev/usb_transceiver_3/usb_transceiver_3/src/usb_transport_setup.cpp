@@ -17,22 +17,22 @@ void usb_transport_device_t::handle_initialize() {
     // Attempt to start (or re-initialize) the read/write context.
     debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
 
-    if ( m_evfd_wr != -1 ) {
+    if ( m_evfd_tx != -1 ) {
         info ( "close(em_evfd_wr); (%s):(%d)", __FUNCTION__, __LINE__ );
-        close (m_evfd_wr);
-        m_evfd_wr = -1;
+        close ( m_evfd_tx );
+        m_evfd_tx = -1;
     }
 
-    if ( m_evfd_rd != -1 ) {
+    if ( m_evfd_rx != -1 ) {
         info ( "close(m_evfd_rd); (%s):(%d)", __FUNCTION__, __LINE__ );
-        close (m_evfd_rd);
-        m_evfd_rd = -1;
+        close ( m_evfd_rx );
+        m_evfd_rx = -1;
     }
 
     if ( m_io_ctx_valid ) {
         m_io_ctx_valid = false;
         info ( "io_destroy(m_io_ctx); (%s):(%d)", __FUNCTION__, __LINE__ );
-        io_destroy(m_io_ctx);
+        io_destroy ( m_io_ctx );
         memset ( &m_io_ctx, 0x00, sizeof(m_io_ctx) );
     }
 
@@ -72,27 +72,18 @@ void usb_transport_device_t::handle_initialize() {
         //          -> ENOMEM
         //
         // Seems all errors are critical. Application cannot continue and should be closed.
-        m_evfd_wr = eventfd(0, 0);
-        debug ( "m_evfd_wr = %d; (%s):(%d)", m_evfd_wr, __FUNCTION__, __LINE__ );
+        m_evfd_tx = eventfd(0, 0);
+        debug ( "m_evfd_wr = %d; (%s):(%d)", m_evfd_tx, __FUNCTION__, __LINE__ );
 
-        m_evfd_rd = eventfd(0, 0);
-        debug("m_evfd_rd = %d; (%s):(%d)", m_evfd_wr, __FUNCTION__, __LINE__);
+        m_evfd_rx = eventfd(0, 0);
+        debug ( "m_evfd_rd = %d; (%s):(%d)", m_evfd_rx, __FUNCTION__, __LINE__ );
 
-        if ( (m_evfd_wr < 0) || (m_evfd_rd < 0) ) {
+        if ( (m_evfd_tx<0) || (m_evfd_rx<0) ) {
 
             err("EP2:  Failed eventfd. Error: %d; (%s):(%d)", errno, __FUNCTION__, __LINE__);
             LOG_USB_STATE(usb_state_t::STATE_FAILED);
 
         } else {
-
-            if (m_evfd_rd > m_evfd_wr) {
-                m_io_range = m_evfd_rd + 1;
-            } else {
-                m_io_range = m_evfd_wr + 1;
-            }
-
-            debug("m_io_range = %d; (%s):(%d)", m_io_range, __FUNCTION__, __LINE__);
-
             LOG_USB_STATE(usb_state_t::STATE_PHANTOM_READ);
         }
 

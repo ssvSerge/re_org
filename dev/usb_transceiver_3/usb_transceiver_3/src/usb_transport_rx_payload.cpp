@@ -7,132 +7,203 @@
 
 #include <logging.h>
 
+
 using namespace std::chrono_literals;
 
 
 namespace hid {
 namespace transport {
 
-//---------------------------------------------------------------------------//
-//  ->  STATE_FAILED            Critical errors. Cannot continue.            //
-//  ->  STATE_SPINUP            EP0 unexpectedly switch down.                //
-//  ->  STATE_RX_HEADER_REQUEST Timeout while reading.                       // 
-//  ->  STATE_HANDLE_REQUEST    Payload ready. Process transaction.          //
-//---------------------------------------------------------------------------//
-void usb_transport_device_t::handle_read_ok ( const checkpoint_t time_out ) {
 
-    // It is expected inp_pay has been validated by handle_payload_read.
-    assert (  m_ctx.inp_pay.size() > 0  );
-    assert (  m_ctx.inp_pay.data() != nullptr );
+using   time_source_t  =  std::chrono::steady_clock;
+using   duration_ms_t  =  std::chrono::milliseconds;
+using   checkpoint_t   =  std::chrono::time_point<time_source_t>;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
-    info  ( "Wait for %d bytes; (%s):(%d)", m_ctx.inp_prm.len, __FUNCTION__, __LINE__ );
+constexpr int USB_IO_MTU           = 65536;
+constexpr int USB_MIN_WAIT_TIME_MS = 3;
 
-    // -> STATE_FAILED              in case of I/O errors.
-    // -> STATE_SPINUP              if EP0 is down.
-    // -> STATE_RX_HEADER_REQUEST   if timeout.
-    // -> STATE_HANDLE_REQUEST      if succeeded.
-    read_frame ( time_out, m_ctx.inp_pay.data(), m_ctx.inp_pay.size(), usb_state_t::STATE_HANDLE_REQUEST );
+void usb_transport_device_t::handle_read_bad ( uint32_t timeout_ms ) {
 
-    debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
-}
-    
-//---------------------------------------------------------------------------//
-//  ->  STATE_FAILED            Critical errors. Cannot continue.            //
-//  ->  STATE_SPINUP            EP0 unexpectedly switch down.                //
-//  ->  STATE_RX_HEADER_REQUEST Timeout while reading.                       // 
-//  ->  STATE_TX_RESPONSE       Payload discarded. Return error code.        //
-//---------------------------------------------------------------------------//
-void usb_transport_device_t::handle_read_bad ( const checkpoint_t time_out ) {
-
-    uint8_t     local_buffer [4096];    // Temporary buffer where to store payload.
-    uint32_t    read_cnt  = 0;          // 
-    uint32_t    data_part = 0;          // 
-    bool        can_continue = true;    // 
+    usb_transport_err_t io_res          = usb_transport_err_t::USB_STATUS_FAILED;
+    bool                error           = true;
+    size_t              read_cnt        = 0; // 
+    size_t              data_part       = 0; // 
+    uint32_t            wait_time_ms    = 0; //
+    usb_frame_t         local_buffer;        //
 
     debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    info  ( "Wait for %d bytes; (%s):(%d)", m_data.inp_prm.len, __FUNCTION__, __LINE__ );
 
-    // Low memory condition.
+    checkpoint_t start_time = time_source_t::now();
+
+    error = false;
+    try {
+        // Assume there's at least 64KB of memory for us.
+        local_buffer.resize ( USB_IO_MTU );
+    } catch ( ... ) {
+        error = true;
+    }
+
+    if ( error ) {
+        err( "Error: No memory; (%s):(%d)", __FUNCTION__, __LINE__ );
+        return;
+    }
+
+    error = true;
     for ( ; ; ) {
 
-        info ( "Read %d from %d bytes; (%s):(%d)", read_cnt, m_ctx.inp_prm.len, __FUNCTION__, __LINE__ );
+        auto duration = time_source_t::now() - start_time;
+        auto duration_ms = std::chrono::duration_cast<duration_ms_t>(duration).count();
 
-        if ( read_cnt == m_ctx.inp_prm.len ) {
-            // Whole frame read.
-            info ( "Frame read; (%s):(%d)", __FUNCTION__, __LINE__ );
-            can_continue = true;
+        debug("Read: %d from %d bytes; (%s):(%d)", (int)read_cnt, m_data.inp_prm.len, __FUNCTION__, __LINE__);
+
+        if ( read_cnt == m_data.inp_prm.len ) {
+            error = false;
+            break;
+        }
+        if ( duration_ms <= USB_MIN_WAIT_TIME_MS ) {
+            break;
+        }
+        if ( m_stop_request ) {
+            break;
+        }
+        if ( m_ep0_inactive ) {
             break;
         }
 
-        data_part = m_ctx.inp_prm.len - read_cnt;
-        if ( data_part > sizeof(local_buffer) ) {
-            data_part = sizeof(local_buffer);
+        data_part = m_data.inp_prm.len - read_cnt;
+        if ( data_part > local_buffer.size() ) {
+            data_part = local_buffer.size();
         }
 
-        can_continue = read_frame ( time_out, local_buffer, data_part, usb_state_t::STATE_RX_PAYLOAD );
-        if ( ! can_continue ) {
-            err ( "Failed read_frame; Skip transaction. (%s):(%d)", __FUNCTION__, __LINE__ );
+        io_res = rx_frame ( local_buffer.data(), data_part, (uint32_t)duration_ms );
+
+        if ( io_res != usb_transport_err_t::USB_STATUS_READY ) {
+            debug ( "rx_frame failed; (%s):(%d)", __FUNCTION__, __LINE__ );
             break;
         }
 
         read_cnt += data_part;
+
     }
 
-    if ( can_continue ) {
-        info ( "Payload read; Ignore payload; Skip transaction; (%s):(%d)", __FUNCTION__, __LINE__ );
-        m_ctx.out_pay.clear();
-        m_ctx.out_prm.cmd    =  hid::stream::cmd_t::STREAM_CMD_ERROR;
-        m_ctx.out_prm.param  =  USB_TRANSPORT_ERR_NO_MEMORY;
-        LOG_USB_STATE ( usb_state_t::STATE_TX_RESPONSE );
-    }
-}
-    
-//---------------------------------------------------------------------------//
-//  ->  STATE_FAILED            Critical errors. Cannot continue.            //
-//  ->  STATE_SPINUP            EP0 unexpectedly switch down.                //
-//  ->  STATE_RX_HEADER_REQUEST Timeout while reading.                       // 
-//  ->  STATE_HANDLE_REQUEST    Payload ready. Process transaction.          //
-//  ->  STATE_TX_RESPONSE       Payload discarded. Return error code.        //
-//---------------------------------------------------------------------------//
-void usb_transport_device_t::handle_payload_read() {
-    
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
-
-    hid::stream::Prefix::GetParams( m_ctx.inp_hdr, m_ctx.inp_prm );
-
-    if ( ! hid::stream::Prefix::Valid(m_ctx.inp_hdr) ) {
-       err("Wrong header received");
-       LOG_USB_STATE(usb_state_t::STATE_RX_HEADER_REQUEST);
-       return;
-    } 
-
-    if ( m_ctx.inp_prm.len == 0 ) {
-        // There could be SYNC request. Payload not expected.
-        info("Valid frame with empty payload; (%s):(%d)", __FUNCTION__, __LINE__ );
-        LOG_USB_STATE(usb_state_t::STATE_HANDLE_REQUEST );
+    if ( m_stop_request ) {
+        // External request to shutdown.
+        err ( "Stop request; (%s):(%d); ", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_SHUTDOWN );
         return;
     }
-        
+
+    if ( m_ep0_inactive ) {
+        // Ignore all possible errors because of inactivity of EP0.
+        err("EP0 inactive; Switch to SPIUP (%s):(%d)", __FUNCTION__, __LINE__);
+        LOG_USB_STATE ( usb_state_t::STATE_SPINUP );
+        return;
+    }
+
+    if ( ! error ) {
+        // Payload successfully read. 
+        // Do not handle command but send error code instead of handling.
+        err ( "Payload ignored; Return error code; (%s):(%d)", __FUNCTION__, __LINE__ );
+        m_data.out_pay.clear();
+        m_data.out_prm.cmd = hid::stream::cmd_t::STREAM_CMD_ERROR;
+        m_data.out_prm.param = USB_TRANSPORT_ERR_NO_MEMORY;
+        LOG_USB_STATE ( usb_state_t::STATE_TX_RESPONSE );
+        return;
+    }
+
+    if ( io_res == usb_transport_err_t::USB_STATUS_TIMEOUT ) {
+        // Critical state!
+        // Host want send data; and low memory condition at device side. 
+        // But still possible to handle commands.
+        err("Payload read; (%s):(%d)", __FUNCTION__, __LINE__);
+        LOG_USB_STATE ( usb_state_t::STATE_RX_HEADER_WAIT );
+        return;
+    }
+
+    // Failure during read process. Can't continue.
+    debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
+    LOG_USB_STATE(usb_state_t::STATE_FAILED );
+    
+}
+
+void usb_transport_device_t::handle_read_ok ( uint32_t timeout_ms ) {
+
+    usb_transport_err_t io_res = usb_transport_err_t::USB_STATUS_FAILED;
+
+    debug( "Enter: (%s):(%d)", __FUNCTION__, __LINE__);
+    info ( "Wait for %d bytes; (%s):(%d)", m_data.inp_prm.len, __FUNCTION__, __LINE__ );
+
+    io_res = rx_frame ( m_data.inp_pay.data(), m_data.inp_pay.size(), timeout_ms );
+
+    if ( m_stop_request ) {
+        // External request to shutdown.
+        err("Stop request; (%s):(%d); ", __FUNCTION__, __LINE__);
+        LOG_USB_STATE(usb_state_t::STATE_SHUTDOWN);
+        return;
+    }
+
+    if ( m_ep0_inactive ) {
+        // Ignore all possible errors because of inactivity of EP0.
+        err("EP0 inactive; Switch to SPIUP (%s):(%d)", __FUNCTION__, __LINE__);
+        LOG_USB_STATE(usb_state_t::STATE_SPINUP);
+        return;
+    }
+
+    if ( io_res == usb_transport_err_t::USB_STATUS_TIMEOUT ) {
+        // Host want send data; Ignore command and wait for the next header.
+        err ( "Timeout while reading payload; (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_RX_HEADER_WAIT );
+        return;
+    }
+
+    if ( io_res == usb_transport_err_t::USB_STATUS_FAILED ) {
+        err ( "Failed rx_frame; (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_FAILED );
+        return;
+    }
+
+    // Payload received. There's a chance to process command.
+    debug ( "Payload received; (%s):(%d)", __FUNCTION__, __LINE__ );
+    LOG_USB_STATE ( usb_state_t::STATE_HANDLE_REQUEST );
+}
+
+void usb_transport_device_t::handle_payload_read() {
+
+    debug( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+
+    if ( ! hid::stream::Prefix::Valid(m_data.inp_hdr) ) {
+        err("Wrong header received; Wait for another one; (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_RX_HEADER_WAIT );
+        return;
+    }
+
+    hid::stream::Prefix::GetParams ( m_data.inp_hdr, m_data.inp_prm );
+
+    if ( m_data.inp_prm.len == 0 ) {
+        // There could be SYNC request. Payload not expected.
+        info("Payload not expected; (%s):(%d)", __FUNCTION__, __LINE__);
+        LOG_USB_STATE(usb_state_t::STATE_HANDLE_REQUEST);
+        return;
+    }
+
     bool alloc_valid = true;
 
     try {
-        m_ctx.inp_pay.resize( m_ctx.inp_prm.len );
-        cleanup ( m_ctx.inp_pay );
-    } catch ( ... ) {
+        m_data.inp_pay.resize ( m_data.inp_prm.len );
+        cleanup( m_data.inp_pay );
+    } catch (...) {
         alloc_valid = false;
-        err("Error: Failed to allocate buffer %d bytes; (%s):(%d)", m_ctx.inp_prm.len, __FUNCTION__, __LINE__ );
+        err("Error: Failed to allocate buffer %d bytes; (%s):(%d)", m_data.inp_prm.len, __FUNCTION__, __LINE__);
     }
-
-    checkpoint_t start_time;
-    checkpoint_t time_out = start_time + duration_ms_t(USB_IO_TIMEOUT_MS);
 
     if ( alloc_valid ) {
-        handle_read_ok (time_out);
+        handle_read_ok  ( USB_IO_TIMEOUT_MS );
     } else {
-        handle_read_bad (time_out);
+        handle_read_bad ( USB_IO_TIMEOUT_MS );
     }
 
-    debug( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
+    debug("Leave: (%s):(%d)", __FUNCTION__, __LINE__);
 }
 
 //---------------------------------------------------------------------------//

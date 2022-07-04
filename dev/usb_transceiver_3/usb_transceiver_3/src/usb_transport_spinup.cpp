@@ -20,20 +20,19 @@ void usb_transport_device_t::handle_spinup() {
     
     if ( spin_cnt == 0 ) {
         // Once per 5 seconds.
-        warn("EP0 down; (%s):(%d)", __FUNCTION__, __LINE__);
+        err ( "EP0 down; (%s):(%d)", __FUNCTION__, __LINE__ );
     }
 
     spin_cnt++;
     spin_cnt %= 50;
 
-    if ( ! m_ep0_active ) {
+    if ( m_ep0_inactive ) {
         std::this_thread::sleep_for(100ms);
     } else {
-        warn( "EP0 ready; (%s):(%d)", __FUNCTION__, __LINE__ );
+        err ( "EP0 ready; (%s):(%d)", __FUNCTION__, __LINE__ );
         spin_cnt = 0;
         LOG_USB_STATE(usb_state_t::STATE_INITIALIZE);
     }
-
 }
 
 //---------------------------------------------------------------------------//

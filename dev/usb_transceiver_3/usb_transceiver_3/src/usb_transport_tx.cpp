@@ -15,38 +15,45 @@ namespace transport {
 
 void usb_transport_device_t::handle_tx_resp() {
 
-    bool io_res;
+    usb_transport_err_t io_res;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    // out_prm.cmd & out_prm.param are configured before.
+    m_data.out_prm.len = static_cast<uint32_t> ( m_data.out_pay.size()) ;
+    hid::stream::Prefix::SetParams ( m_data.out_prm, m_data.out_hdr );
 
-    m_ctx.out_prm.len = static_cast<uint32_t> ( m_ctx.out_hdr.size() );
-    hid::stream::Prefix::SetParams( m_ctx.out_prm, m_ctx.out_hdr );
-
-    info ( "Sending Response; Header: %d bytes; Payload: %d bytes; (%s):(%d)", (int)(m_ctx.out_hdr.size()), (int)m_ctx.out_pay.size(), __FUNCTION__, __LINE__);
-
-    //---------------------------------------------------------------------------//
-    //  ->  STATE_FAILED            Critical errors (cannot continue).           //
-    //  ->  STATE_SPINUP            EP0 unexpectedly switch down.                //
-    //  ->  STATE_RX_HEADER_REQUEST Timeout while sending. Host inactive.        // 
-    //  ->  STATE_RX_HEADER_REQUEST Frame successfully sent.                     //
-    //---------------------------------------------------------------------------//
-    io_res = write_frame ( m_ctx.out_hdr.data(), m_ctx.out_hdr.size(), usb_state_t::STATE_RX_HEADER_REQUEST );
-
-    if ( ! io_res ) {
-        err ( "Failed to send header; (%s):(%d)", __FUNCTION__, __LINE__ );
-    } else
-    if ( m_ctx.out_pay.size() > 0 ) {
-
-        info ( "Sending payload; Len:%d; (%s):(%d)", (int)(m_ctx.out_pay.size()), __FUNCTION__, __LINE__ );
-        io_res = write_frame ( m_ctx.out_pay.data(), m_ctx.out_pay.size(), usb_state_t::STATE_RX_HEADER_REQUEST );
-        if ( ! io_res ) {
-            err ( "Failed to send payload; (%s):(%d)", __FUNCTION__, __LINE__ );
-        }
+    io_res = tx_frame ( m_data.out_hdr.data(), m_data.out_hdr.size(), USB_IO_TIMEOUT_MS );
+    if ( io_res == usb_transport_err_t::USB_STATUS_READY ) {
+        io_res = tx_frame ( m_data.out_pay.data(), m_data.out_pay.size(), USB_IO_TIMEOUT_MS );
     }
 
-    debug ( "Done: (%s):(%d)", __FUNCTION__, __LINE__ );
+    if ( m_stop_request ) {
+        // External request to shutdown.
+        err ( "Stop request; (%s):(%d); ", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE(usb_state_t::STATE_SHUTDOWN);
+        return;
+    }
+
+    if ( m_ep0_inactive ) {
+        // Ignore all possible errors because of inactivity of EP0.
+        err ( "EP0 inactive; Switch to SPIUP (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE(usb_state_t::STATE_SPINUP);
+        return;
+    }
+
+    if ( io_res == usb_transport_err_t::USB_STATUS_FAILED )  {
+        err ( "Failed tx_frame; (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_FAILED );
+        return;
+    }
+
+    if ( io_res == usb_transport_err_t::USB_STATUS_TIMEOUT )  {
+        err ( "Timeout while reading payload; (%s):(%d)", __FUNCTION__, __LINE__);
+    }
+
+    LOG_USB_STATE(usb_state_t::STATE_RX_HEADER_WAIT);
+
 }
-    
+
 //---------------------------------------------------------------------------//
 
 }

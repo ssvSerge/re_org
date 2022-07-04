@@ -20,7 +20,7 @@ state_monitor_t  g_transaction_state;
 
 //---------------------------------------------------------------------------//
 
-void cleanup(usb_frame_t& frame) {
+void usb_transport_device_t::cleanup ( usb_frame_t& frame ) {
     if ( frame.size() > 0 ) {
         size_t cleanup_len = frame.size();
         if (cleanup_len > MAX_CLEANUP_LEN) {
@@ -37,7 +37,11 @@ void cleanup(usb_frame_t& frame) {
 usb_transport_device_t::usb_transport_device_t() {
 
     memset ( &m_io_ctx, 0, sizeof(m_io_ctx) );
-    memset ( &m_fs_eps, 0, sizeof(m_fs_eps) );
+    m_ep0_ctrl = -1;
+    m_ep1_tx   = -1;
+    m_evfd_tx  = -1;
+    m_ep2_rx   = -1;
+    m_evfd_rx  = -1;
 }
 
 void usb_transport_device_t::stop() {
@@ -84,81 +88,52 @@ int32_t usb_transport_device_t::ep0_init(std::string epDirectory) {
 
     m_ep_directory = epDirectory;
 
-    for ( int i = 0; i < 3; i++) {
-        m_fs_eps[i] = -1;
-    }
+    m_ep0_ctrl = -1;
+    m_ep1_tx   = -1;
+    m_ep2_rx   = -1;
 
     std::string ep0_path = epDirectory + "/" + "ep0";
 
     info  ( "writing descriptors (in v2 format) to: %s", ep0_path.c_str() );
 
     debug ( "Open endpoint: %s", ep0_path.c_str() );
-    m_fs_eps[0] = open ( ep0_path.c_str(), O_RDWR|O_NDELAY|O_NONBLOCK );
-    if ( m_fs_eps[0] == -1 ) {
+    m_ep0_ctrl = open ( ep0_path.c_str(), O_RDWR|O_NDELAY|O_NONBLOCK );
+    if ( m_ep0_ctrl == -1 ) {
         err ( "Failed to open endpoint: %s; (%s):(%d)", ep0_path.c_str(), __FUNCTION__, __LINE__ );
         is_failed = true;
     } else {
 
         int io_res;
 
-        io_res = write ( m_fs_eps[0], &descriptors, sizeof(descriptors) );
+        io_res = write ( m_ep0_ctrl, &descriptors, sizeof(descriptors) );
         if ( io_res == -1 ) {
             err ( "Failed to write descriptors; %s; (%s):(%d)", ep0_path.c_str(), __FUNCTION__, __LINE__ );
             is_failed = true;
         }
 
-        io_res = write ( m_fs_eps[0], &strings, sizeof(strings) );
+        io_res = write ( m_ep0_ctrl, &strings, sizeof(strings) );
         if ( io_res == -1 ) {
             err ( "Failed to write strings; %s; (%s):(%d)", ep0_path.c_str(), __FUNCTION__, __LINE__ );
             is_failed = true;
         }
 
         if ( ! is_failed ) {
-            for (int i = 1; i < 3; i++) {
-                m_fs_eps[i] = open_ep (i);
-                if (m_fs_eps[i] == -1) {
-                    is_failed = true;
-                    break;
-                };
-            }
+            m_ep1_tx = open_ep(1);
+            m_ep2_rx = open_ep(2);
         }
 
     }
 
     if ( is_failed ) {
-        for (int i = 1; i < 3; i++) {
-            close ( m_fs_eps[i] );
-        }
-        err ("Failed to initialize endpoint: (%s):(%d)", __FUNCTION__, __LINE__);
+        err("Failed to initialize endpoint: (%s):(%d)", __FUNCTION__, __LINE__);
+        close ( m_ep0_ctrl );
+        close ( m_ep1_tx );
+        close ( m_ep2_rx );
         return -1;
     }
 
     err("Done: (%s):(%d)", __FUNCTION__, __LINE__);
     return 0;
-}
-
-bool usb_transport_device_t::get_timeout_ms ( const checkpoint_t point_timeout, uint32_t& ms_cnt ) {
-
-    bool ret_val = false;
-
-    ms_cnt = 0;
-
-    // Time source is a steady time. We're free from time shift.
-    checkpoint_t my_time = time_source_t::now();
-
-    if (point_timeout > my_time) {
-
-        auto duration = point_timeout - my_time;
-        auto duration_ms = std::chrono::duration_cast<duration_ms_t>(duration);
-
-        // Allow waiting only if it's more than 2 milliseconds.
-        if (duration_ms.count() > 2) {
-            ms_cnt = static_cast<uint32_t>( duration_ms.count() );
-            ret_val = true;
-        }
-    }
-
-    return ret_val;
 }
 
 int32_t usb_transport_device_t::open_ep ( int32_t endpoint_no ) {
@@ -176,6 +151,33 @@ int32_t usb_transport_device_t::open_ep ( int32_t endpoint_no ) {
     }
     return fd;
 }
+
+#if 0
+bool usb_transport_device_t::get_timeout_ms(const checkpoint_t point_timeout, uint32_t& ms_cnt) {
+
+    bool ret_val = false;
+
+    ms_cnt = 0;
+
+    // Time source is a steady time. We're free from time shift.
+    checkpoint_t my_time = time_source_t::now();
+
+    if (point_timeout > my_time) {
+
+        auto duration = point_timeout - my_time;
+        auto duration_ms = std::chrono::duration_cast<duration_ms_t>(duration);
+
+        // Allow waiting only if it's more than 2 milliseconds.
+        if (duration_ms.count() > 2) {
+            ms_cnt = static_cast<uint32_t>(duration_ms.count());
+            ret_val = true;
+        }
+    }
+
+    return ret_val;
+}
+#endif
+
 
 //---------------------------------------------------------------------------//
 
