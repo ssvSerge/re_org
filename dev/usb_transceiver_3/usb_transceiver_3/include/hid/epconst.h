@@ -39,20 +39,30 @@ struct Descriptors {
     __le32 ss_count;
     __le32 os_count;
     struct {
-        struct usb_interface_descriptor         intf;
+        struct usb_interface_descriptor intf;
         struct usb_endpoint_descriptor_no_audio sink;
         struct usb_endpoint_descriptor_no_audio source;
-    } fs_descs, hs_descs;
+    } __attribute__((packed)) fs_descs, hs_descs;
     struct {
-        struct usb_interface_descriptor         intf;
+        struct usb_interface_descriptor intf;
         struct usb_endpoint_descriptor_no_audio sink;
-        struct usb_ss_ep_comp_descriptor        sink_comp;
+        struct usb_ss_ep_comp_descriptor sink_comp;
         struct usb_endpoint_descriptor_no_audio source;
-        struct usb_ss_ep_comp_descriptor        source_comp;
-    } ss_descs;    
-    struct usb_os_desc_header   os_header;
-    struct usb_ext_compat_desc  os_desc;
-};
+        struct usb_ss_ep_comp_descriptor source_comp;
+    } ss_descs;
+    struct usb_os_desc_header os_header;
+    struct usb_ext_compat_desc os_desc;
+}   __attribute__((packed));
+
+#define STR_INTERFACE_ "Camera Control"
+
+struct Strings {
+    struct usb_functionfs_strings_head header;
+    struct {
+        __le16 code;
+        const char str1[sizeof STR_INTERFACE_];
+    }   __attribute__((packed)) lang0;
+}   __attribute__((packed));
 
 #define STR_INTERFACE_ "Camera Control"
 
