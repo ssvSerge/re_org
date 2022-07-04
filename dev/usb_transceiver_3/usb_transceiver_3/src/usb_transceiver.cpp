@@ -67,8 +67,7 @@ int main(int argc, char** argv) {
         log_location = result["log"].as<std::string>();
         if (log_location.compare("stdout") == 0) {
             fLogFD = stdout;
-        }
-        else {
+        } else {
             fLogFD = open_file(log_location);
             if (fLogFD == NULL) {
                 std::cout << "unable to open log file: \"" << log_location << "\"" << std::endl;
@@ -80,8 +79,7 @@ int main(int argc, char** argv) {
     std::string udcDirectory(pGadgetDirectory);
     if (result.count("gadget")) {
         udcDirectory += result["gadget"].as<std::string>();
-    }
-    else {
+    } else {
         udcDirectory += "hidcam";
     }
 
