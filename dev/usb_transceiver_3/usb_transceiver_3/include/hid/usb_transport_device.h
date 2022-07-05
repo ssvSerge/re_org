@@ -143,9 +143,9 @@ class usb_transport_device_t {
         void handle_initialize   ();
         void handle_spinup       ();
         void handle_phantom_read ();
+        void handle_hdr_wait     ();
         void handle_command      ();
         void handle_tx_resp      ();
-        void handle_hdr_wait     ();
         void handle_payload_read ();
 
     private:

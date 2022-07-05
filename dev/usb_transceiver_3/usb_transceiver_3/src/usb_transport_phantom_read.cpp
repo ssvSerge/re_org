@@ -21,7 +21,7 @@ void usb_transport_device_t::handle_phantom_read() {
     err_t       io_res      = err_t::USB_STATUS_UNKNOWN;
     uint8_t     dummy       = 0;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    // debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
 
     LOG_USB_STATE(usb_state_t::STATE_RX_HEADER);
     return;

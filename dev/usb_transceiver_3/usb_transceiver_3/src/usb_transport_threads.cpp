@@ -41,12 +41,13 @@ int32_t usb_transport_device_t::init_ep_threads() {
     m_tid_ep0 = std::thread( &usb_transport_device_t::ep0_thread, this);
 
     debug ( "Waiting on EP0..." );
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     int wait_time_ms = 0;
     while (wait_time_ms < (240 * 1000) ) {
 
         if ( m_stop_request ) {
-            err("Stop request; (%s):(%d)", __FUNCTION__, __LINE__);
+            err ( "Stop request; (%s):(%d)", __FUNCTION__, __LINE__ );
             break;
         }
 
@@ -62,7 +63,6 @@ int32_t usb_transport_device_t::init_ep_threads() {
         err ( "Stop request; (%s):(%d); ", __FUNCTION__, __LINE__ );        
         return -1;
     }
-
     if ( m_ep0_inactive ) {
         err ( "Unable to initialize endpoint. Exiting. (%s):(%d)", __FUNCTION__, __LINE__ );
         return -1;
@@ -71,11 +71,10 @@ int32_t usb_transport_device_t::init_ep_threads() {
     debug ( "EP0: ready." );
     m_tid_com = std::thread( &usb_transport_device_t::ep1_ep2_thread, this );
 
-    // debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
     return 0;
 }
 
-void usb_transport_device_t::ep0_thread() {
+void usb_transport_device_t::ep0_thread () {
 
     int         select_res;
     fd_set      rfds;
@@ -100,11 +99,8 @@ void usb_transport_device_t::ep0_thread() {
                 break;
             }
 
-            // t.tv_sec  = 0;      // Seconds
-            // t.tv_usec = 100000; // Microseconds
-
-            t.tv_sec  = 5; // Seconds
-            t.tv_usec = 0; // Microseconds
+            t.tv_sec  = 0;
+            t.tv_usec = 500 * 1000;
 
             FD_ZERO ( &rfds );
             FD_SET  ( m_ep0_ctrl, &rfds );
@@ -187,8 +183,6 @@ void usb_transport_device_t::ep0_thread() {
         }
 
     }
-
-    // info ( "Leave: ep0_thread; (%s):(%d)", __FUNCTION__, __LINE__ );
 
     m_thread_fininsed.notify_one();
 }

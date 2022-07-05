@@ -23,7 +23,7 @@ void usb_transport_device_t::handle_hdr_wait() {
 
     err_t io_res;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    // debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
 
     // There's only 24 bytes in the prefix. Ignore the NO_MEMORY state.
     m_data.inp_hdr.resize ( hid::stream::Prefix::PrefixSize() );
