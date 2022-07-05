@@ -86,7 +86,7 @@ void usb_transport_device_t::handle_initialize() {
 
     }
 
-    debug("Leave: (%s):(%d)", __FUNCTION__, __LINE__);
+    // debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
 }
 
 //---------------------------------------------------------------------------//

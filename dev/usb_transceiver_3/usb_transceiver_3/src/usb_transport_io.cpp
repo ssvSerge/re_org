@@ -23,18 +23,21 @@ constexpr uint32_t IO_CANCEL_TIMEOUT_MS  = 10 * 1000;
 
 //---------------------------------------------------------------------------//
 
-err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, uint32_t timeout_ms ) {
+err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, const uint32_t timeout_ms ) {
 
-    struct iocb*    iocbs       = &io_request;
-    struct timeval  timeout     = {};
-    fd_set          rfds        = {};
-    uint64_t        ev_cnt      = 0;
-    struct io_event io_evt[2]   = {};
-    int             io_res;
-    int             io_range;
-    uint32_t        sleep_time_ms;
+    const uint32_t      wait_time_min_ms = 200; // 5 times per second.
+    err_t               ret_val      = err_t::USB_STATUS_UNKNOWN;
+    struct iocb*        iocbs        = &io_request;
+    struct timeval      timeout      = {};
+    fd_set              rfds         = {};
+    uint64_t            ev_cnt       = 0;
+    struct io_event     io_evt[2]    = {};
+    int                 io_res       = 0;
+    int                 io_range     = 0;
+    uint32_t            wait_time_ms = 0;
+    uint32_t            slice_ms     = 0;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    debug ( "Enter: (%s):(%d); timeout: %d ms", __FUNCTION__, __LINE__, timeout_ms );
 
     io_range = std::max (  (m_evfd_rx+1),  (m_evfd_tx+1)  );
 
@@ -66,15 +69,23 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, uint
         return err_t::USB_STATUS_FAILED;
     }
 
-    sleep_time_ms = 0;
+    wait_time_ms = 0;
     for ( ; ; ) {
 
-        FD_ZERO ( &rfds );
-        FD_SET  ( fd, &rfds );
+        if ( timeout_ms == 0 ) {
+            slice_ms = wait_time_min_ms;
+        } else {
+            slice_ms = timeout_ms - wait_time_ms;
+            if ( slice_ms > wait_time_min_ms) {
+                slice_ms = wait_time_min_ms;
+            }
+        }
 
-        // 5 times per second.
-        timeout.tv_sec  = 0;          // seconds
-        timeout.tv_usec = 100 * 1000; // microseconds
+        timeout.tv_sec  = 0; 
+        timeout.tv_usec = slice_ms * 1000;
+
+        FD_ZERO ( &rfds );
+        FD_SET ( fd, &rfds );
 
         // select - synchronous I/O multiplexing.
         // 
@@ -90,19 +101,6 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, uint
         // 
         io_res = select ( io_range, &rfds, NULL, NULL, &timeout );
 
-        if ( io_res == -1 ) {
-            if ( errno == EINTR ) {
-                continue;
-            }
-        }
-
-        if ( io_res == 0 ) {
-            sleep_time_ms += 100;
-            if (  (timeout_ms>0)  &&  (sleep_time_ms>timeout_ms)  ) {
-                break;
-            }
-        }
-
         if ( m_stop_request ) {
             // Simulate (or force) timeout because of external request to STOP.
             err ( "Stop request; (%s):(%d)", __FUNCTION__, __LINE__ );
@@ -111,12 +109,31 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, uint
         }
 
         if ( m_ep0_inactive ) {
-            // Simulate (or force) timeout because of external request to STOP.
+            // Simulate (or force) timeout because of inactivity of EP0.
             err ( "EP0 inactive; (%s):(%d)", __FUNCTION__, __LINE__ );
             io_res = 0;
             break;
         }
 
+        // Read success.
+        if ( io_res > 0 ) {
+            break;
+        }
+
+        // Timeout.
+        if ( io_res == 0 ) {
+            wait_time_ms += slice_ms;
+            continue;
+        }
+
+        // Failed
+        if ( io_res == -1 ) {
+            if ( errno == EINTR ) {
+                continue;
+            }
+        }
+
+        // Failure.
         break;
     }
 
@@ -175,14 +192,18 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, uint
             return err_t::USB_STATUS_FAILED;
         }
 
-        debug ( "Frame processed; (%s):(%d)", __FUNCTION__, __LINE__ );
+        // debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
+
+        ret_val = err_t::USB_STATUS_READY;
 
     } else {
 
         if ( io_res < 0 ) {
             err ( "Error: Failed select with code: %d; text: %s; (%s):(%d)", errno, strerror(errno), __FUNCTION__, __LINE__ );
+            ret_val = err_t::USB_STATUS_FAILED;
         } else {
-            debug ( "timeout with %d ms; (%s):(%d)", sleep_time_ms, __FUNCTION__, __LINE__ );
+            debug ( "timeout with %d ms; (%s):(%d)", wait_time_ms, __FUNCTION__, __LINE__ );
+            ret_val = err_t::USB_STATUS_TIMEOUT;
         }
 
         for ( ; ; ) {
@@ -210,20 +231,24 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, uint
                 continue;
             }
 
+            if ( io_res != 0 ) {
+                // err ( "Failed io_cancel with code: %d; text: %s; (%s):(%d)", io_res, strerror(errno), __FUNCTION__, __LINE__ );
+                io_res = 0;
+            }
+
             break;
 
         }
 
         if ( io_res != 0 ) {
             err ( "Error: Failed io_cancel with code: %d; text: %s; (%s):(%d)", io_res, strerror(errno), __FUNCTION__, __LINE__ );
-            return err_t::USB_STATUS_FAILED;
+            ret_val = err_t::USB_STATUS_FAILED;
         }
 
     }
 
-    debug ( "Done; (%s):(%d)", __FUNCTION__, __LINE__ );
-
-    return err_t::USB_STATUS_READY;
+    // debug ( "Leave; (%s):(%d)", __FUNCTION__, __LINE__ );
+    return ret_val;
 }
 
 err_t usb_transport_device_t::rx_frame ( uint8_t* const dst_ptr, size_t dst_len, uint32_t timeout_ms ) {
@@ -232,7 +257,7 @@ err_t usb_transport_device_t::rx_frame ( uint8_t* const dst_ptr, size_t dst_len,
 
     struct iocb iocb_in;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    debug ( "Enter: (%s):(%d); len: %d; timeout: %d ms", __FUNCTION__, __LINE__, (int)dst_len, timeout_ms );
 
     io_prep_pread ( 
         &iocb_in, 
@@ -247,7 +272,7 @@ err_t usb_transport_device_t::rx_frame ( uint8_t* const dst_ptr, size_t dst_len,
 
     ret_val = io_process ( iocb_in, m_evfd_rx, timeout_ms );
 
-    debug ( "Done; (%s):(%d)", __FUNCTION__, __LINE__ );
+    // debug ( "Leave; (%s):(%d)", __FUNCTION__, __LINE__ );
 
     return ret_val;
 }
@@ -273,11 +298,10 @@ err_t usb_transport_device_t::tx_frame ( const uint8_t* const src_ptr, size_t sr
 
     ret_val = io_process ( iocb_out, m_ep1_tx, timeout_ms );
 
-    debug ( "Done; (%s):(%d)", __FUNCTION__, __LINE__ );
+    // debug ( "Leave; (%s):(%d)", __FUNCTION__, __LINE__ );
 
     return ret_val;
 }
-
 
 }
 }

@@ -18,47 +18,39 @@ constexpr int PHANTOM_READ_TIMEOUT_MS = 1;
 
 void usb_transport_device_t::handle_phantom_read() {
 
-    err_t io_res = err_t::USB_STATUS_UNKNOWN;
-    uint32_t    reads_cnt = 0;
-    uint8_t     dummy = 0;
+    err_t       io_res      = err_t::USB_STATUS_UNKNOWN;
+    uint8_t     dummy       = 0;
 
     debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
 
-    for ( ; ; ) {
+    do {
         io_res = rx_frame ( &dummy, sizeof(dummy), PHANTOM_READ_TIMEOUT_MS );
-        if ( io_res == err_t::USB_STATUS_READY ) {
-            reads_cnt++;
-            continue;
-        }
-        break;
+    } while ( io_res == err_t::USB_STATUS_READY );
+
+    if ( m_stop_request ) {
+        err ( "Stop request; (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_SHUTDOWN );
+        return;
     }
 
-    assert ( io_res != err_t::USB_STATUS_READY );
+    if ( m_ep0_inactive ) {
+        err ( "EP0 inactive; Switch to SPIUP (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE(usb_state_t::STATE_SPINUP);
+        return;
+    }
+
+    if ( io_res == err_t::USB_STATUS_FAILED ) {
+        err ( "Failed rx_frame(); (%s):(%d)", __FUNCTION__, __LINE__ );
+        LOG_USB_STATE ( usb_state_t::STATE_FAILED );
+        return;
+    }
 
     if ( io_res == err_t::USB_STATUS_TIMEOUT ) {
-
-        debug ("Read: %d bytes; (%s):(%d)", reads_cnt, __FUNCTION__, __LINE__ );
+        debug ( "Timeout; Go to RX_HEADER; (%s):(%d)", __FUNCTION__, __LINE__ );
         LOG_USB_STATE ( usb_state_t::STATE_RX_HEADER );
-
-    } else {
-    
-        warn ( "Failed: rx_frame; (%s):(%d)", __FUNCTION__, __LINE__);
-
-        if ( m_ep0_inactive ) {
-
-            // Assume the inactivity of EP0 is the source of read error.    
-            err ( "EP0 inactive; Switch to SPIUP (%s):(%d)", __FUNCTION__, __LINE__);
-            LOG_USB_STATE ( usb_state_t::STATE_SPINUP );
-
-        } else {
-
-            // Critical error in rx_frame().
-            err ("Critical error; Failed to read; (%s):(%d)", __FUNCTION__, __LINE__ );
-            LOG_USB_STATE ( usb_state_t::STATE_FAILED );
-
-        }
-
+        return;
     }
+
 }
 
 //---------------------------------------------------------------------------//

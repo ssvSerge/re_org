@@ -57,7 +57,7 @@ void usb_transport_device_t::handle_command() {
     m_data.out_prm.cmd    =  resp_cmd;
     m_data.out_prm.param  =  resp_code;
 
-    debug ( "Leave with cmd: %d; code: %d; (%s):(%d)", (int)resp_cmd, (int)resp_code, __FUNCTION__, __LINE__ );
+    // debug ( "Leave with cmd: %d; code: %d; (%s):(%d)", (int)resp_cmd, (int)resp_code, __FUNCTION__, __LINE__ );
 
     LOG_USB_STATE ( usb_state_t::STATE_TX_RESPONSE );
 }

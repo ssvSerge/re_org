@@ -71,7 +71,7 @@ int32_t usb_transport_device_t::init_ep_threads() {
     debug ( "EP0: ready." );
     m_tid_com = std::thread( &usb_transport_device_t::ep1_ep2_thread, this );
 
-    debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
+    // debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
     return 0;
 }
 
@@ -109,15 +109,17 @@ void usb_transport_device_t::ep0_thread() {
             FD_ZERO ( &rfds );
             FD_SET  ( m_ep0_ctrl, &rfds );
 
-            info("ep0_thread + select; (%s):(%d)", __FUNCTION__, __LINE__);
+            // info("ep0_thread + select; (%s):(%d)", __FUNCTION__, __LINE__);
             select_res = select ( m_ep0_ctrl + 1, &rfds, NULL, NULL, &t );
-            info("ep0_thread + select; result: %d; (%s):(%d)", select_res, __FUNCTION__, __LINE__);
+            // info("ep0_thread + select; result: %d; (%s):(%d)", select_res, __FUNCTION__, __LINE__);
 
             if ( select_res<0 ) {
                 if (errno == EINTR) {
                     continue;
                 }
             }
+
+            break;
         }
 
         if ( m_stop_request ) {
@@ -186,7 +188,7 @@ void usb_transport_device_t::ep0_thread() {
 
     }
 
-    info ( "Leave: ep0_thread; (%s):(%d)", __FUNCTION__, __LINE__ );
+    // info ( "Leave: ep0_thread; (%s):(%d)", __FUNCTION__, __LINE__ );
 
     m_thread_fininsed.notify_one();
 }
@@ -259,25 +261,25 @@ void usb_transport_device_t::ep1_ep2_thread () {
         }
     }
 
-    err("Close i/o context; (%s):(%d)", __FUNCTION__, __LINE__);
+    err ( "Close i/o context; (%s):(%d)", __FUNCTION__, __LINE__ );
     io_destroy ( m_io_ctx );
 
-    err("Close m_evfd_rx; (%s):(%d)", __FUNCTION__, __LINE__);
+    err ( "Close m_evfd_rx; (%s):(%d)", __FUNCTION__, __LINE__ );
     close ( m_evfd_rx );
 
-    err("Close m_evfd_tx; (%s):(%d)", __FUNCTION__, __LINE__);
+    err ( "Close m_evfd_tx; (%s):(%d)", __FUNCTION__, __LINE__ );
     close ( m_evfd_tx );
 
-    err("Close EP0; (%s):(%d)", __FUNCTION__, __LINE__);
+    err ( "Close EP0; (%s):(%d)", __FUNCTION__, __LINE__ );
     close ( m_ep0_ctrl );
 
-    err("Close EP1; (%s):(%d)", __FUNCTION__, __LINE__);
+    err ( "Close EP1; (%s):(%d)", __FUNCTION__, __LINE__ );
     close ( m_ep1_tx );
 
-    err("Close EP2; (%s):(%d)", __FUNCTION__, __LINE__);
+    err ( "Close EP2; (%s):(%d)", __FUNCTION__, __LINE__ );
     close ( m_ep2_rx );
 
-    info("Leave: ep1_ep2_thread; (%s):(%d)", __FUNCTION__, __LINE__);
+    info ( "Leave: ep1_ep2_thread; (%s):(%d)", __FUNCTION__, __LINE__ );
     m_thread_fininsed.notify_one();
 }
 

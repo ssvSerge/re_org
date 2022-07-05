@@ -74,14 +74,13 @@ void usb_transport_device_t::join() {
         info ( "EP1_EP2 down; (%s):(%d)", __FUNCTION__, __LINE__ );
     }
 
-    info ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
+    // info ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
 }
 
 int32_t usb_transport_device_t::ep0_init(std::string epDirectory) {
 
     Descriptors descriptors = get_descriptors();
     Strings     strings     = get_strings();
-    int         ret         = {};
     bool        is_failed   = false;
 
     debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
@@ -151,33 +150,6 @@ int32_t usb_transport_device_t::open_ep ( int32_t endpoint_no ) {
     }
     return fd;
 }
-
-#if 0
-bool usb_transport_device_t::get_timeout_ms(const checkpoint_t point_timeout, uint32_t& ms_cnt) {
-
-    bool ret_val = false;
-
-    ms_cnt = 0;
-
-    // Time source is a steady time. We're free from time shift.
-    checkpoint_t my_time = time_source_t::now();
-
-    if (point_timeout > my_time) {
-
-        auto duration = point_timeout - my_time;
-        auto duration_ms = std::chrono::duration_cast<duration_ms_t>(duration);
-
-        // Allow waiting only if it's more than 2 milliseconds.
-        if (duration_ms.count() > 2) {
-            ms_cnt = static_cast<uint32_t>(duration_ms.count());
-            ret_val = true;
-        }
-    }
-
-    return ret_val;
-}
-#endif
-
 
 //---------------------------------------------------------------------------//
 

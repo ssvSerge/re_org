@@ -133,7 +133,7 @@ class usb_transport_device_t {
 
         void cleanup ( usb_frame_t& frame );
 
-        err_t io_process  ( struct iocb& io_request, int fd, uint32_t timeout_ms );
+        err_t io_process  ( struct iocb& io_request, int fd, const uint32_t timeout_ms );
         err_t rx_frame    ( uint8_t* const dst_ptr, size_t dst_len, uint32_t timeout_ms );
         err_t tx_frame    ( const uint8_t* const src_ptr, size_t src_len, uint32_t timeout_ms );
 
