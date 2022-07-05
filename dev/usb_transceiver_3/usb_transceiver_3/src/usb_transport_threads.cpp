@@ -228,7 +228,7 @@ void usb_transport_device_t::ep1_ep2_thread () {
                 handle_phantom_read();
                 break;
 
-            case usb_state_t::STATE_RX_HEADER_WAIT:
+            case usb_state_t::STATE_RX_HEADER:
                 handle_hdr_wait();
                 break;
 

@@ -8,10 +8,7 @@ namespace hid {
 namespace transport {
 
 //---------------------------------------------------------------------------//
-//  ->  STATE_FAILED            Critical error. Cannot continue.             //
-//  ->  STATE_SPINUP            EP0 unexpectedly switch down.                //
-//  ->  STATE_PHANTOM_READ      Try to read data buffered before.            //
-//---------------------------------------------------------------------------//
+    
 void usb_transport_device_t::handle_initialize() {
 
     // Attempt to start (or re-initialize) the read/write context.
@@ -73,14 +70,14 @@ void usb_transport_device_t::handle_initialize() {
         //
         // Seems all errors are critical. Application cannot continue and should be closed.
         m_evfd_tx = eventfd(0, 0);
-        debug ( "m_evfd_wr = %d; (%s):(%d)", m_evfd_tx, __FUNCTION__, __LINE__ );
+        debug ( "evfd_wr = %d; err = %d; (%s):(%d)", m_evfd_tx, errno, __FUNCTION__, __LINE__ );
 
         m_evfd_rx = eventfd(0, 0);
-        debug ( "m_evfd_rd = %d; (%s):(%d)", m_evfd_rx, __FUNCTION__, __LINE__ );
+        debug ( "evfd_rd = %d; err = %d; (%s):(%d)", m_evfd_rx, errno, __FUNCTION__, __LINE__ );
 
-        if ( (m_evfd_tx<0) || (m_evfd_rx<0) ) {
+        if (  (m_evfd_tx<0)  ||  (m_evfd_rx<0)  ) {
 
-            err("EP2:  Failed eventfd. Error: %d; (%s):(%d)", errno, __FUNCTION__, __LINE__);
+            err("Failed eventfd. (%s):(%d)", __FUNCTION__, __LINE__);
             LOG_USB_STATE(usb_state_t::STATE_FAILED);
 
         } else {

@@ -27,6 +27,8 @@ void usb_transport_device_t::handle_spinup() {
     spin_cnt %= 50;
 
     if ( m_ep0_inactive ) {
+        // Give a time to system to manage EP0.
+        // Seems 10 times per second is fast enough.
         std::this_thread::sleep_for(100ms);
     } else {
         err ( "EP0 ready; (%s):(%d)", __FUNCTION__, __LINE__ );

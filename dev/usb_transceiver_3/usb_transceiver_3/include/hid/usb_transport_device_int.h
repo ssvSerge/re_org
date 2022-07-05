@@ -52,7 +52,7 @@ class state_monitor_t {
                 case usb_state_t::STATE_SPINUP:            { ret_val = "Spin up";          break; }
                 case usb_state_t::STATE_INITIALIZE:        { ret_val = "Initialize";       break; }
                 case usb_state_t::STATE_PHANTOM_READ:      { ret_val = "Phantom Read";     break; }
-                case usb_state_t::STATE_RX_HEADER_WAIT:    { ret_val = "Rx HDR wait";      break; }
+                case usb_state_t::STATE_RX_HEADER:         { ret_val = "Rx HDR";           break; }
                 case usb_state_t::STATE_RX_PAYLOAD:        { ret_val = "Rx Payload";       break; }
                 case usb_state_t::STATE_HANDLE_REQUEST:    { ret_val = "Process command";  break; }
                 case usb_state_t::STATE_TX_RESPONSE:       { ret_val = "Tx Response";      break; }

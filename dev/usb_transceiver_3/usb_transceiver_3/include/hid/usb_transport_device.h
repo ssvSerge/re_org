@@ -22,7 +22,7 @@ using   usb_frame_t    =  hid::types::storage_t;
 constexpr uint32_t  USB_TRANSPORT_ERR_NO_MEMORY = 100;
 
 
-enum class usb_transport_err_t {
+enum class err_t {
     USB_STATUS_UNKNOWN,                 ///<
     USB_STATUS_READY,                   ///<
     USB_STATUS_TIMEOUT,                 ///<
@@ -33,7 +33,7 @@ enum class usb_state_t {
     STATE_INITIALIZE               = 0, ///< Initialize endpoint at start/restart time.
     STATE_SPINUP                   = 1, ///< Event "ep0 down" received. Reset context and return to the state "INIT".
     STATE_PHANTOM_READ             = 2, ///< Attempt to read from endpoint until short timeout. 
-    STATE_RX_HEADER_WAIT           = 4, ///< Wait for the header. Timeout is a valid state.    
+    STATE_RX_HEADER                = 4, ///< Wait for the header. Timeout is a valid state.    
     STATE_RX_PAYLOAD               = 5, ///< Read payload.
     STATE_HANDLE_REQUEST           = 6, ///< HEADER and PYALOAD are successfully read. Send it to J-Engine.
     STATE_TX_RESPONSE              = 7, ///< Place the TX request for HEADER.
@@ -133,9 +133,9 @@ class usb_transport_device_t {
 
         void cleanup ( usb_frame_t& frame );
 
-        usb_transport_err_t io_process  ( struct iocb& io_request, int fd, uint32_t timeout_ms );
-        usb_transport_err_t rx_frame    ( uint8_t* const dst_ptr, size_t dst_len, uint32_t timeout_ms );
-        usb_transport_err_t tx_frame    ( const uint8_t* const src_ptr, size_t src_len, uint32_t timeout_ms );
+        err_t io_process  ( struct iocb& io_request, int fd, uint32_t timeout_ms );
+        err_t rx_frame    ( uint8_t* const dst_ptr, size_t dst_len, uint32_t timeout_ms );
+        err_t tx_frame    ( const uint8_t* const src_ptr, size_t src_len, uint32_t timeout_ms );
 
 
         void log_event ( const struct usb_ctrlrequest* setup );
@@ -147,8 +147,6 @@ class usb_transport_device_t {
         void handle_tx_resp      ();
         void handle_hdr_wait     ();
         void handle_payload_read ();
-        void handle_read_ok      ( uint32_t timeout_ms );
-        void handle_read_bad     ( uint32_t timeout_ms );
 
     private:
         utils::thread_event         m_thread_fininsed;          ///< at least one thread stopped.
