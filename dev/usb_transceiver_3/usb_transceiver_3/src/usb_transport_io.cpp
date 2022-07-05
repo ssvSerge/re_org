@@ -23,9 +23,23 @@ constexpr uint32_t IO_CANCEL_TIMEOUT_MS  = 10 * 1000;
 
 //---------------------------------------------------------------------------//
 
+static std::string g_logger;
+
+void io_add_pos ( const char* name, int pos ) {
+    UNUSED(name);
+    // g_logger += name;
+    // g_logger += ": ";
+    g_logger += std::to_string(pos);
+    g_logger += "; ";
+}
+
+// #define LOG_POS { io_add_pos( __FUNCTION__, __LINE__); }
+#define LOG_POS    {}
+
+
 err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, const uint32_t timeout_ms ) {
 
-    const uint32_t      wait_time_min_ms = 200; // 5 times per second.
+    const uint32_t      wait_time_max_ms = 2000; // 5 times per second.
     err_t               ret_val      = err_t::USB_STATUS_UNKNOWN;
     struct iocb*        iocbs        = &io_request;
     struct timeval      timeout      = {};
@@ -39,7 +53,8 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
 
     debug ( "Enter: (%s):(%d); timeout: %d ms", __FUNCTION__, __LINE__, timeout_ms );
 
-    io_range = std::max (  (m_evfd_rx+1),  (m_evfd_tx+1)  );
+    // io_range = std::max (  (m_evfd_rx+1),  (m_evfd_tx+1)  );
+    io_range = fd + 1;
 
     // io_submit - submit asynchronous I/O blocks for processing
     // 
@@ -62,6 +77,8 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
     //   EPERM   Submitting context does not have the CAP_SYS_ADMIN capability.
     // 
     //   EAGAIN seems the critical state of the system. There's no resources in the system.
+
+    LOG_POS;
     io_res = io_submit ( m_io_ctx, 1, &iocbs );
     if ( io_res < 0 ) {
         err ("Error: Failed io_submit with code: %d; text: %s; (%s):(%d)", io_res, strerror(io_res), __FUNCTION__, __LINE__ );
@@ -69,20 +86,24 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
         return err_t::USB_STATUS_FAILED;
     }
 
+    LOG_POS;
     wait_time_ms = 0;
     for ( ; ; ) {
 
+        LOG_POS;
+
         if ( timeout_ms == 0 ) {
-            slice_ms = wait_time_min_ms;
+            slice_ms = wait_time_max_ms;
         } else {
             slice_ms = timeout_ms - wait_time_ms;
-            if ( slice_ms > wait_time_min_ms) {
-                slice_ms = wait_time_min_ms;
-            }
         }
 
-        timeout.tv_sec  = 0; 
-        timeout.tv_usec = slice_ms * 1000;
+        if ( slice_ms > wait_time_max_ms) {
+            slice_ms = wait_time_max_ms;
+        }
+
+        timeout.tv_sec  = (slice_ms / 1000);
+        timeout.tv_usec = (slice_ms % 1000) * 1000;
 
         FD_ZERO ( &rfds );
         FD_SET ( fd, &rfds );
@@ -101,6 +122,8 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
         // 
         io_res = select ( io_range, &rfds, NULL, NULL, &timeout );
 
+        LOG_POS;
+
         if ( m_stop_request ) {
             // Simulate (or force) timeout because of external request to STOP.
             err ( "Stop request; (%s):(%d)", __FUNCTION__, __LINE__ );
@@ -117,12 +140,17 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
 
         // Read success.
         if ( io_res > 0 ) {
+            LOG_POS;
             break;
         }
 
         // Timeout.
         if ( io_res == 0 ) {
             wait_time_ms += slice_ms;
+            if (  (timeout_ms>0)  &&  (wait_time_ms>timeout_ms)  ) {
+                LOG_POS;
+                break;
+            }
             continue;
         }
 
@@ -131,13 +159,15 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
             if ( errno == EINTR ) {
                 continue;
             }
+            LOG_POS;
+            break;
         }
-
-        // Failure.
-        break;
     }
 
+    LOG_POS;
     if ( io_res > 0 ) {
+
+        LOG_POS;
 
         // read - read from a file descriptor
         // 
@@ -162,10 +192,12 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
         // All other are real and critical errors.
         io_res = read ( fd, &ev_cnt, sizeof(ev_cnt) );
         if ( io_res < 0 ) {
-            err ( "Error: Failed read with code: %d; str: %s; (%s):(%d)", errno, strerror(errno), __FUNCTION__, __LINE__);
+            err ( "Error: Failed with code: %d; str: %s; (%s):(%d)", errno, strerror(errno), __FUNCTION__, __LINE__);
             // Logic error or insufficient resources in the OS.
             return err_t::USB_STATUS_FAILED;
         }
+
+        LOG_POS;
 
         // io_getevents - read asynchronous I/O events from the completion queue
         //
@@ -192,11 +224,13 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
             return err_t::USB_STATUS_FAILED;
         }
 
+        LOG_POS;
         // debug ( "Leave: (%s):(%d)", __FUNCTION__, __LINE__ );
-
         ret_val = err_t::USB_STATUS_READY;
 
     } else {
+
+        LOG_POS;
 
         if ( io_res < 0 ) {
             err ( "Error: Failed select with code: %d; text: %s; (%s):(%d)", errno, strerror(errno), __FUNCTION__, __LINE__ );
@@ -205,6 +239,8 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
             debug ( "timeout with %d ms; (%s):(%d)", wait_time_ms, __FUNCTION__, __LINE__ );
             ret_val = err_t::USB_STATUS_TIMEOUT;
         }
+
+        LOG_POS;
 
         for ( ; ; ) {
 
@@ -225,6 +261,7 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
             //   EINVAL       The AIO context specified by ctx_id is invalid.
             //   ENOSYS       io_cancel() is not implemented on this architecture.
             //  
+            LOG_POS;
             io_res = io_cancel ( m_io_ctx, &io_request, io_evt );
 
             if ( io_res == EAGAIN ) {
@@ -232,20 +269,24 @@ err_t usb_transport_device_t::io_process ( struct iocb& io_request, int fd, cons
             }
 
             if ( io_res != 0 ) {
-                // err ( "Failed io_cancel with code: %d; text: %s; (%s):(%d)", io_res, strerror(errno), __FUNCTION__, __LINE__ );
+                err ( "Failed io_cancel with code: %d; text: %s; (%s):(%d)", io_res, strerror(errno), __FUNCTION__, __LINE__ );
                 io_res = 0;
             }
 
+            LOG_POS;
             break;
 
         }
 
+        LOG_POS;
         if ( io_res != 0 ) {
             err ( "Error: Failed io_cancel with code: %d; text: %s; (%s):(%d)", io_res, strerror(errno), __FUNCTION__, __LINE__ );
             ret_val = err_t::USB_STATUS_FAILED;
         }
 
     }
+
+    LOG_POS;
 
     // debug ( "Leave; (%s):(%d)", __FUNCTION__, __LINE__ );
     return ret_val;
@@ -257,7 +298,7 @@ err_t usb_transport_device_t::rx_frame ( uint8_t* const dst_ptr, size_t dst_len,
 
     struct iocb iocb_in;
 
-    debug ( "Enter: (%s):(%d); len: %d; timeout: %d ms", __FUNCTION__, __LINE__, (int)dst_len, timeout_ms );
+    debug ( "INP frame %d bytes; timeout: %d ms", (int)dst_len, timeout_ms );
 
     io_prep_pread ( 
         &iocb_in, 
@@ -270,9 +311,9 @@ err_t usb_transport_device_t::rx_frame ( uint8_t* const dst_ptr, size_t dst_len,
     iocb_in.u.c.flags |= IOCB_FLAG_RESFD;
     iocb_in.u.c.resfd  = m_evfd_rx;
 
+    g_logger = "";
     ret_val = io_process ( iocb_in, m_evfd_rx, timeout_ms );
-
-    // debug ( "Leave; (%s):(%d)", __FUNCTION__, __LINE__ );
+    // debug ( "RX IO Path: Path: %s", g_logger.c_str() );
 
     return ret_val;
 }
@@ -283,7 +324,7 @@ err_t usb_transport_device_t::tx_frame ( const uint8_t* const src_ptr, size_t sr
 
     struct iocb iocb_out;
 
-    debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
+    debug ( "OUT frame %d bytes; timeout: %d ms", (int)src_len, timeout_ms );
 
     io_prep_pwrite ( 
         &iocb_out, 
@@ -296,9 +337,9 @@ err_t usb_transport_device_t::tx_frame ( const uint8_t* const src_ptr, size_t sr
     iocb_out.u.c.flags |= IOCB_FLAG_RESFD;
     iocb_out.u.c.resfd  = m_evfd_tx;
 
-    ret_val = io_process ( iocb_out, m_ep1_tx, timeout_ms );
-
-    // debug ( "Leave; (%s):(%d)", __FUNCTION__, __LINE__ );
+    g_logger = "";
+    ret_val = io_process ( iocb_out, m_evfd_tx, timeout_ms );
+    // debug ( "TX IO Path: Path: %s", g_logger.c_str() );
 
     return ret_val;
 }

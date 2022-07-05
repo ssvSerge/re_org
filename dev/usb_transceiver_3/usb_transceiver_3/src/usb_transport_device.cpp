@@ -97,6 +97,8 @@ int32_t usb_transport_device_t::ep0_init(std::string epDirectory) {
 
     debug ( "Open endpoint: %s", ep0_path.c_str() );
     m_ep0_ctrl = open ( ep0_path.c_str(), O_RDWR|O_NDELAY|O_NONBLOCK );
+    debug ( "m_ep0_ctrl = %d; err = %d; (%s):(%d)", m_ep0_ctrl, errno, __FUNCTION__, __LINE__ );
+
     if ( m_ep0_ctrl == -1 ) {
         err ( "Failed to open endpoint: %s; (%s):(%d)", ep0_path.c_str(), __FUNCTION__, __LINE__ );
         is_failed = true;
@@ -117,8 +119,10 @@ int32_t usb_transport_device_t::ep0_init(std::string epDirectory) {
         }
 
         if ( ! is_failed ) {
-            m_ep1_tx = open_ep(1);
-            m_ep2_rx = open_ep(2);
+            m_ep1_tx = open_ep(1); // tx endpoint
+            debug ( "m_ep1_tx   = %d; err = %d; (%s):(%d)", m_ep1_tx, errno, __FUNCTION__, __LINE__);
+            m_ep2_rx = open_ep(2); // rx endpoint
+            debug ( "m_ep2_rx   = %d; err = %d; (%s):(%d)", m_ep2_rx, errno, __FUNCTION__, __LINE__);
         }
 
     }

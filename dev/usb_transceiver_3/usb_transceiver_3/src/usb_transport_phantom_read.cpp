@@ -23,6 +23,10 @@ void usb_transport_device_t::handle_phantom_read() {
 
     debug ( "Enter: (%s):(%d)", __FUNCTION__, __LINE__ );
 
+    LOG_USB_STATE(usb_state_t::STATE_RX_HEADER);
+    return;
+
+    #if 0
     do {
         io_res = rx_frame ( &dummy, sizeof(dummy), PHANTOM_READ_TIMEOUT_MS );
     } while ( io_res == err_t::USB_STATUS_READY );
@@ -50,7 +54,7 @@ void usb_transport_device_t::handle_phantom_read() {
         LOG_USB_STATE ( usb_state_t::STATE_RX_HEADER );
         return;
     }
-
+    #endif
 }
 
 //---------------------------------------------------------------------------//
